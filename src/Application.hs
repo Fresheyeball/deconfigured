@@ -19,6 +19,7 @@ import qualified Data.Text.Lazy as LT
 
 import Data.String
 import Data.Monoid
+import Data.Default
 import Data.Functor.Identity
 import Control.Applicative
 import Control.Monad.Reader.Class
@@ -35,15 +36,15 @@ application :: ( MonadReader Env m
                ) => ScottyT LT.Text m ()
 application = do
   middleware $ staticPolicy (noDots >-> addBase "static")
-
+  mainHandler
   notFound $ do
     (root :: T.Text) <- (T.pack . envHostname) <$> lift ask
 
     let page :: Monad m => WebPage (HtmlT m ()) T.Text
-        page = mempty { metaVars = meta_ [ makeAttribute "http-equiv" "refresh"
-                                         , content_ $ "3;url=" <> root
-                                         ]
-                      }
+        page = def { metaVars = meta_ [ makeAttribute "http-equiv" "refresh"
+                                      , content_ $ "3;url=" <> root
+                                      ]
+                   }
 
         -- Coerce the monad inside to change the deployment scheme.
         content :: HtmlT (AbsoluteUrlT T.Text Identity) ()

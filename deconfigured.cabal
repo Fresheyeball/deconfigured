@@ -25,6 +25,7 @@ Library
                       , transformers
                       , urlpath
                       , webpage
+                      , data-default
 
 Executable deconfigured
   Default-Language:     Haskell2010
