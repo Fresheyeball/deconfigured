@@ -12,6 +12,7 @@ import           Web.Scotty.Trans hiding (header)
 import qualified Data.Text as T
 
 import System.Directory
+import System.IO
 import GHC.Generics
 
 import Data.Maybe
@@ -88,16 +89,16 @@ main = do
 
   -- Yaml bug
   yamlConfigExists <- doesFileExist yamlConfigPath
-  yamlConfigContents <-
-    if yamlConfigExists then readFile yamlConfigPath
-                        else return ""
+  yamlConfigSize <-
+    if yamlConfigExists
+      then do
+        yamlConfigHandle <- openFile yamlConfigPath ReadMode
+        hFileSize yamlConfigHandle
+      else return 0
 
-  let mYamlConfigIO :: IO (Maybe AppOpts)
-      mYamlConfigIO = if yamlConfigExists && yamlConfigContents /= ""
+  (mYamlConfig :: Maybe AppOpts) <- if yamlConfigSize /= 0
         then Y.decodeFile yamlConfigPath
         else return Nothing
-
-  mYamlConfig <- mYamlConfigIO
 
   let yamlConfig :: AppOpts
       yamlConfig = fromMaybe
@@ -105,7 +106,9 @@ main = do
         mYamlConfig
 
       config :: AppOpts
-      config = yamlConfig `override` options commandOpts
+      config =
+        (def `override` yamlConfig)
+          `override` options commandOpts
 
   entry (fromJust $ port config) $ appOptsToEnv config
 
@@ -121,6 +124,8 @@ main = do
 appOptsToEnv :: AppOpts -> Env
 appOptsToEnv (AppOpts (Just p) (Just h)) =
   Env $ h <> ":" <> show p
+appOptsToEnv (AppOpts Nothing Nothing) =
+  error "default overrides failed somehow... VOODOO"
 
 -- | Entry point, post options parsing
 entry :: Int -> Env -> IO ()
