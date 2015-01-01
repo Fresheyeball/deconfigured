@@ -1,0 +1,138 @@
+{-# LANGUAGE DeriveGeneric #-}
+{-# LANGUAGE ScopedTypeVariables #-}
+
+module Main where
+
+import Application
+
+import           Options.Applicative
+import qualified Data.Yaml as Y
+import qualified Data.Aeson.Types as A
+import           Web.Scotty.Trans hiding (header)
+import qualified Data.Text as T
+
+import System.Directory
+import GHC.Generics
+
+import Data.Maybe
+import Data.Default
+import Data.Monoid
+import Control.Applicative
+import Control.Monad.Reader
+
+-- | Application-wide options
+data AppOpts = AppOpts
+  { port :: Maybe Int
+  , host :: Maybe String }
+  deriving Generic
+
+-- | Like a monoid, but as a "setter"
+class Override a where
+  override :: a -> a -> a
+
+instance Override (Maybe a) where
+  Nothing `override` Nothing = Nothing
+  Nothing `override` (Just a) = Just a
+  (Just a) `override` Nothing = Just a
+  (Just a) `override` (Just b) = Just b
+
+instance Override AppOpts where
+  (AppOpts p h) `override` (AppOpts p' h') =
+    AppOpts
+      (p `override` p')
+      (h `override` h')
+
+instance Y.ToJSON AppOpts where
+  toJSON = A.genericToJSON A.defaultOptions
+
+instance Y.FromJSON AppOpts where
+  parseJSON = A.genericParseJSON A.defaultOptions
+
+instance Default AppOpts where
+  def = AppOpts (Just 3000) (Just "http://localhost")
+
+appOpts :: Parser AppOpts
+appOpts = AppOpts
+  <$> optional ( option auto
+        ( long "port"
+       <> short 'p'
+       <> metavar "PORT"
+       <> help "port to listen on" ))
+  <*> optional ( strOption
+        ( long "host"
+       <> short 'h'
+       <> metavar "HOST"
+       <> help "host to deploy URLs over" ))
+
+-- | Command-line options
+data App = App
+  { options :: AppOpts
+  , configPath :: Maybe String }
+
+app :: Parser App
+app = App
+  <$> appOpts
+  <*> optional ( strOption
+        ( long "config"
+       <> short 'c'
+       <> metavar "CONFIG"
+       <> help "path to config file" ))
+
+main :: IO ()
+main = do
+  (commandOpts :: App) <- execParser opts
+
+  let yamlConfigPath = fromMaybe
+        "config/config.yaml" $
+        configPath commandOpts
+
+  -- Yaml bug
+  yamlConfigExists <- doesFileExist yamlConfigPath
+  yamlConfigContents <-
+    if yamlConfigExists then readFile yamlConfigPath
+                        else return ""
+
+  let mYamlConfigIO :: IO (Maybe AppOpts)
+      mYamlConfigIO = if yamlConfigExists && yamlConfigContents /= ""
+        then Y.decodeFile yamlConfigPath
+        else return Nothing
+
+  mYamlConfig <- mYamlConfigIO
+
+  let yamlConfig :: AppOpts
+      yamlConfig = fromMaybe
+        def
+        mYamlConfig
+
+      config :: AppOpts
+      config = yamlConfig `override` options commandOpts
+
+  entry (fromJust $ port config) $ appOptsToEnv config
+
+  where
+    opts :: ParserInfo App
+    opts = info (helper <*> app)
+      ( fullDesc
+     <> progDesc "Serve application from PORT over HOST"
+     <> header "deconfigured - a web server" )
+
+-- | Note that this function will fail to pattern match on @Nothing@'s - use
+-- @def@ beforehand.
+appOptsToEnv :: AppOpts -> Env
+appOptsToEnv (AppOpts (Just p) (Just h)) =
+  Env $ h <> ":" <> show p
+
+-- | Entry point, post options parsing
+entry :: Int -> Env -> IO ()
+entry port env =
+  let -- Access the url root from a @ScottyT@ or @ActionT@ expression with
+      -- @(root :: T.Text) <- lift ask@.
+      hostConf :: ReaderT Env m a -> m a
+      hostConf =
+        flip runReaderT env
+  in
+
+  scottyT port
+    hostConf
+    hostConf
+    application
