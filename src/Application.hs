@@ -6,6 +6,7 @@
 module Application where
 
 import Server
+import Templates
 
 import UrlPath
 import Web.Page.Lucid
@@ -40,15 +41,15 @@ application = do
   notFound $ do
     (root :: T.Text) <- (T.pack . envHostname) <$> lift ask
 
-    let page :: Monad m => WebPage (HtmlT m ()) T.Text
-        page = def { metaVars = meta_ [ makeAttribute "http-equiv" "refresh"
-                                      , content_ $ "3;url=" <> root
-                                      ]
-                   }
+    let redirPage :: Monad m => WebPage (HtmlT m ()) T.Text
+        redirPage = mainPage { metaVars = meta_ [ makeAttribute "http-equiv" "refresh"
+                                                , content_ $ "3;url=" <> root
+                                                ]
+                             }
 
         -- Coerce the monad inside to change the deployment scheme.
         content :: HtmlT (AbsoluteUrlT T.Text Identity) ()
-        content = template page $
+        content = mainTemplate redirPage $
           div_ [] $ mconcat
             [ h1_ [] "Not Found!"
             , p_ [] $ mconcat
