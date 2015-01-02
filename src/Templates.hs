@@ -19,7 +19,7 @@ mainPage = def { pageTitle = "DeConfigured"
                , bodyScripts = bodyScripts'
                }
   where
-  bodyScripts' = renderMarkup bodyScriptsMarkup
+  bodyScripts' = renderMarkupw bodyScriptsMarkup
   bodyScriptsMarkup :: Monad m => HostedMarkupM (HtmlT m ())
   bodyScriptsMarkup = do
     deploy JavaScript

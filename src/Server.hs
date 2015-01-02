@@ -28,7 +28,7 @@ mainHandler :: ( MonadIO m
 mainHandler = do
   ( get "/" $ do
     mainHtml $ mainTemplate
-      (mainPage `appendTitle` "Home") "aww yee" )
+      (mainPage `appendTitle` "Home") "aww yea" )
 
 mainHtml :: ( MonadReader Env reader
             , MonadIO reader
