@@ -4,6 +4,7 @@
 module Main where
 
 import Application
+import Application.Types
 
 import           Options.Applicative
 import qualified Data.Yaml as Y

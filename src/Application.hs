@@ -5,6 +5,7 @@
 
 module Application where
 
+import Application.Types
 import Server
 import Templates
 
@@ -26,10 +27,6 @@ import Control.Applicative
 import Control.Monad.Reader.Class
 import Control.Monad.IO.Class
 import Control.Monad.Trans
-
--- The environment accessible from our application
-data Env = Env
-  { envHostname :: String }
 
 application :: ( MonadReader Env m
                , MonadIO m
