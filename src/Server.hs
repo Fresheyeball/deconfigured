@@ -27,7 +27,8 @@ mainHandler :: ( MonadIO m
                ) => ScottyT LT.Text m ()
 mainHandler = do
   ( get "/" $ do
-    mainHtml $ mainTemplate mainPage "aww yee" )
+    mainHtml $ mainTemplate
+      (mainPage `appendTitle` "Home") "aww yee" )
 
 mainHtml :: ( MonadReader Env reader
             , MonadIO reader
