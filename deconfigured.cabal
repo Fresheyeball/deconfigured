@@ -25,6 +25,7 @@ Library
                       , transformers
                       , urlpath
                       , webpage
+                      , markup
                       , data-default
 
 Executable deconfigured
@@ -46,6 +47,7 @@ Executable deconfigured
                       , transformers
                       , urlpath
                       , webpage
+                      , markup
 
 Test-Suite spec
   Type:                 exitcode-stdio-1.0

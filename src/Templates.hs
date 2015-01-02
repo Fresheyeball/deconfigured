@@ -5,6 +5,7 @@ module Templates where
 
 import UrlPath
 import Web.Page.Lucid
+import Data.Markup
 import Lucid.Base
 import qualified Data.Text as T
 
@@ -15,7 +16,14 @@ import Data.Functor.Identity
 mainPage :: Monad m =>
             WebPage (HtmlT m ()) T.Text
 mainPage = def { pageTitle = "DeConfigured"
+               , bodyScripts = bodyScripts'
                }
+  where
+  bodyScripts' = renderMarkup bodyScriptsMarkup
+  bodyScriptsMarkup :: Monad m => HostedMarkupM (HtmlT m ())
+  bodyScriptsMarkup = do
+    deploy JavaScript
+      ("//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js" :: T.Text)
 
 appendTitle :: Monad m =>
                WebPage (HtmlT m ()) T.Text
