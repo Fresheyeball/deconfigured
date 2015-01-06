@@ -25,7 +25,7 @@ Library
                       , transformers
                       , urlpath
                       , webpage
-                      , markup
+                      , markup >= 0.0.6.1
                       , data-default
 
 Executable deconfigured

@@ -13,17 +13,43 @@ import Data.Monoid
 import Data.Default
 import Data.Functor.Identity
 
+-- | This is the default main template.
 mainPage :: Monad m =>
             WebPage (HtmlT m ()) T.Text
 mainPage = def { pageTitle = "DeConfigured"
                , bodyScripts = bodyScripts'
+               , styles = styles'
+               , afterStylesScripts = afterStylesScripts'
                }
   where
-  bodyScripts' = renderMarkup bodyScriptsMarkup
-  bodyScriptsMarkup :: Monad m => HostedMarkupM (HtmlT m ())
-  bodyScriptsMarkup = do
-    deploy JavaScript
-      ("//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js" :: T.Text)
+  bodyScripts' = renderMarkup cdnBodyScripts
+              <> renderMarkup inlineBodyScripts
+  cdnBodyScripts :: Monad m => HostedMarkupM (HtmlT m ())
+  cdnBodyScripts = mconcat
+    [ deploy JavaScript
+        ("//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js" :: T.Text)
+    , deploy JavaScript
+        ("//cdnjs.cloudflare.com/ajax/libs/foundation/5.5.0/js/foundation.min.js" :: T.Text)
+    ]
+  inlineBodyScripts :: Monad m => InlineMarkupM (HtmlT m ())
+  inlineBodyScripts = mconcat
+    [ deploy JavaScript
+        ("$(document).foundation();" :: T.Text)
+    ]
+  styles' = renderMarkup cdnStyles
+  cdnStyles :: Monad m => HostedMarkupM (HtmlT m ())
+  cdnStyles = mconcat
+    [ deploy Css
+        ("//cdnjs.cloudflare.com/ajax/libs/foundation/5.5.0/css/normalize.min.css" :: T.Text)
+    , deploy Css
+        ("//cdnjs.cloudflare.com/ajax/libs/foundation/5.5.0/css/foundation.min.css" :: T.Text)
+    ]
+  afterStylesScripts' = renderMarkup cdnStylesScripts
+  cdnStylesScripts :: Monad m => HostedMarkupM (HtmlT m ())
+  cdnStylesScripts = mconcat
+    [ deploy JavaScript
+        ("//cdnjs.cloudflare.com/ajax/libs/modernizr/2.8.3/modernizr.min.js" :: T.Text)
+    ]
 
 appendTitle :: Monad m =>
                WebPage (HtmlT m ()) T.Text
