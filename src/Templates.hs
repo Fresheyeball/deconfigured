@@ -3,6 +3,8 @@
 
 module Templates where
 
+import Templates.Styles (mainStyle)
+
 import UrlPath
 import Web.Page.Lucid
 import Data.Markup
@@ -37,12 +39,17 @@ mainPage = def { pageTitle = "DeConfigured"
         ("$(document).foundation();" :: T.Text)
     ]
   styles' = renderMarkup cdnStyles
+         <> renderMarkup inlineStyles
   cdnStyles :: Monad m => HostedMarkupM (HtmlT m ())
   cdnStyles = mconcat
     [ deploy Css
         ("//cdnjs.cloudflare.com/ajax/libs/foundation/5.5.0/css/normalize.min.css" :: T.Text)
     , deploy Css
         ("//cdnjs.cloudflare.com/ajax/libs/foundation/5.5.0/css/foundation.min.css" :: T.Text)
+    ]
+  inlineStyles :: Monad m => InlineMarkupM (HtmlT m ())
+  inlineStyles = mconcat
+    [ deploy Css mainStyle
     ]
   afterStylesScripts' = renderMarkup cdnStylesScripts
   cdnStylesScripts :: Monad m => HostedMarkupM (HtmlT m ())

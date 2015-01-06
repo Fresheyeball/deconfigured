@@ -27,6 +27,8 @@ Library
                       , webpage
                       , markup >= 0.0.6.1
                       , data-default
+                      , shakespeare
+                      , template-haskell
 
 Executable deconfigured
   Default-Language:     Haskell2010
@@ -48,6 +50,8 @@ Executable deconfigured
                       , urlpath
                       , webpage
                       , markup
+                      , shakespeare
+                      , template-haskell
 
 Test-Suite spec
   Type:                 exitcode-stdio-1.0
