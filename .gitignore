@@ -1,3 +1,6 @@
+# Haskell
+#=========
+
 dist
 cabal-dev
 *.o
@@ -8,5 +11,13 @@ cabal-dev
 .hsenv
 .cabal-sandbox/
 cabal.sandbox.config
+
+# Node.js
+#=========
+
+node_modules
+
+# Application
+#=============
 
 config/config.yaml

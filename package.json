@@ -1,0 +1,27 @@
+{
+  "name": "deconfigured",
+  "version": "0.0.0",
+  "description": "My website",
+  "main": "dev/js/index.js",
+  "private": true,
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "mocha"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/athanclark/deconfigured"
+  },
+  "author": "athanclark",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/athanclark/deconfigured/issues"
+  },
+  "homepage": "https://github.com/athanclark/deconfigured",
+  "dependencies": {
+    "amplify": "0.0.11",
+    "jquery": "^2.1.3"
+  }
+}
