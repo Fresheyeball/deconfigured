@@ -33,7 +33,7 @@ application :: ( MonadReader Env m
                , Functor m
                ) => ScottyT LT.Text m ()
 application = do
-  middleware $ staticPolicy (noDots >-> addBase "./static")
+  middleware $ staticPolicy (noDots >-> addBase "/opt/deconfigured/static")
   mainHandler
   notFound $ do
     (root :: T.Text) <- (T.pack . envHostname) <$> lift ask
