@@ -4,6 +4,7 @@
 module Templates where
 
 import Templates.Styles (mainStyle)
+import Templates.Scripts (googleAnalytics)
 
 import UrlPath
 import Web.Page.Lucid
@@ -37,6 +38,7 @@ mainPage = def { pageTitle = "DeConfigured"
   inlineBodyScripts = mconcat
     [ deploy JavaScript
         ("$(document).foundation();" :: T.Text)
+    , deploy JavaScript googleAnalytics
     ]
   styles' = renderMarkup cdnStyles
          <> renderMarkup inlineStyles

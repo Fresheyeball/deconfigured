@@ -39,9 +39,10 @@ application = do
     (root :: T.Text) <- (T.pack . envHostname) <$> lift ask
 
     let redirPage :: Monad m => WebPage (HtmlT m ()) T.Text
-        redirPage = let page = mainPage { metaVars = meta_ [ makeAttribute "http-equiv" "refresh"
-                                                           , content_ $ "3;url=" <> root
-                                                           ]
+        redirPage = let page = mainPage { metaVars = meta_
+                          [ makeAttribute "http-equiv" "refresh"
+                          , content_ $ "3;url=" <> root
+                          ]
                                         }
                     in
                     appendTitle page "Not Found"
