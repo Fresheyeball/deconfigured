@@ -25,7 +25,8 @@ import Control.Monad.Reader
 -- | Application-wide options
 data AppOpts = AppOpts
   { port :: Maybe Int
-  , host :: Maybe String }
+  , host :: Maybe String
+  , prefix :: Maybe String }
   deriving Generic
 
 -- | Like a monoid, but as a "setter"
@@ -39,10 +40,11 @@ instance Override (Maybe a) where
   (Just a) `override` (Just b) = Just b
 
 instance Override AppOpts where
-  (AppOpts p h) `override` (AppOpts p' h') =
+  (AppOpts p h pr) `override` (AppOpts p' h' pr') =
     AppOpts
       (p `override` p')
       (h `override` h')
+      (pr `override` pr')
 
 instance Y.ToJSON AppOpts where
   toJSON = A.genericToJSON A.defaultOptions
@@ -51,7 +53,7 @@ instance Y.FromJSON AppOpts where
   parseJSON = A.genericParseJSON A.defaultOptions
 
 instance Default AppOpts where
-  def = AppOpts (Just 3000) (Just "http://localhost")
+  def = AppOpts (Just 3000) (Just "http://localhost") (Just "./")
 
 appOpts :: Parser AppOpts
 appOpts = AppOpts
@@ -65,6 +67,10 @@ appOpts = AppOpts
        <> short 'h'
        <> metavar "HOST"
        <> help "host to deploy URLs over" ))
+  <*> optional ( strOption
+        ( long "prefix"
+       <> metavar "PREFIX"
+       <> help "folder the app is being deployed from" ))
 
 -- | Command-line options
 data App = App
@@ -117,15 +123,15 @@ main = do
     opts :: ParserInfo App
     opts = info (helper <*> app)
       ( fullDesc
-     <> progDesc "Serve application from PORT over HOST"
+     <> progDesc "Serve application in PREFIX over HOST:PORT"
      <> header "deconfigured - a web server" )
 
 -- | Note that this function will fail to pattern match on @Nothing@'s - use
 -- @def@ beforehand.
 appOptsToEnv :: AppOpts -> Env
-appOptsToEnv (AppOpts (Just p) (Just h)) =
-  Env $ h <> ":" <> show p
-appOptsToEnv (AppOpts Nothing Nothing) =
+appOptsToEnv (AppOpts (Just p) (Just h) (Just pr)) =
+  Env pr $ h <> ":" <> show p
+appOptsToEnv (AppOpts Nothing _ _) =
   error "default overrides failed somehow... VOODOO"
 
 -- | Entry point, post options parsing

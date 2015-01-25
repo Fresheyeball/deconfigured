@@ -30,6 +30,9 @@ Library
                       , shakespeare
                       , hjsmin
                       , template-haskell
+                      , http-types
+                      , directory
+                      , bytestring
 
 Executable deconfigured
   Default-Language:     Haskell2010
@@ -54,6 +57,9 @@ Executable deconfigured
                       , shakespeare
                       , hjsmin
                       , template-haskell
+                      , http-types
+                      , directory
+                      , bytestring
 
 Test-Suite spec
   Type:                 exitcode-stdio-1.0

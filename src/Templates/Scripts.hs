@@ -5,12 +5,16 @@
 module Templates.Scripts where
 
 import Text.Julius
+import Text.Jasmine (minify)
 import qualified Data.Text as T
 import qualified Data.Text.Lazy as LT
+import Data.Text.Lazy.Encoding (encodeUtf8, decodeUtf8)
+import qualified Data.ByteString.Lazy as LB
 import Language.Haskell.TH
 
 googleAnalytics :: LT.Text
-googleAnalytics = renderJavascript $ goog' undefined
+googleAnalytics = (decodeUtf8 . minify . encodeUtf8) $
+    renderJavascript $ goog' undefined
   where
   goog' = [js|
 

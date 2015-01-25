@@ -1,6 +1,6 @@
+{-# LANGUAGE FlexibleContexts #-}
 {-# LANGUAGE OverloadedStrings #-}
 {-# LANGUAGE ScopedTypeVariables #-}
-{-# LANGUAGE FlexibleContexts #-}
 
 module Server where
 
@@ -14,7 +14,10 @@ import Web.Scotty.Trans
 import Lucid.Base
 import qualified Data.Text as T
 import qualified Data.Text.Lazy as LT
+import System.Directory (doesFileExist)
+import Network.HTTP.Types (notFound404)
 
+import Data.Monoid
 import Data.Functor.Identity
 import Control.Applicative
 import Control.Monad.Trans
@@ -29,6 +32,16 @@ mainHandler = do
   ( get "/" $ do
     mainHtml $ mainTemplate
       (mainPage `appendTitle` "Home") "aww yea" )
+  ( get "/blog" $ do
+    mainHtml $ mainTemplate
+      (mainPage `appendTitle` "Blog") "Blog" )
+  ( get "/blog/:slug" $ do
+    (slug :: LT.Text) <- param "slug" -- FIXME: This catches empty, too!
+    pr <- envPrefix <$> lift ask
+    exists <- liftIO $ doesFileExist $ pr <> "blog/" <> LT.unpack slug <> ".md"
+    if exists then mainHtml $ mainTemplate
+                    (mainPage `appendTitle` "Blog") $ toHtmlRaw slug
+              else status notFound404 )
 
 mainHtml :: ( MonadReader Env reader
             , MonadIO reader

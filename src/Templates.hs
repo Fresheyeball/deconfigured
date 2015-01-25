@@ -1,3 +1,4 @@
+{-# LANGUAGE BangPatterns #-}
 {-# LANGUAGE OverloadedStrings #-}
 {-# LANGUAGE ExtendedDefaultRules #-}
 
@@ -9,6 +10,7 @@ import Templates.Scripts (googleAnalytics)
 import UrlPath
 import Web.Page.Lucid
 import Data.Markup
+import Lucid
 import Lucid.Base
 import qualified Data.Text as T
 
@@ -72,4 +74,10 @@ mainTemplate :: WebPage (HtmlT (AbsoluteUrlT T.Text Identity) ()) T.Text
              -> HtmlT (AbsoluteUrlT T.Text Identity) ()
              -> HtmlT (AbsoluteUrlT T.Text Identity) ()
 mainTemplate page content =
-  template page content
+  div_ [class_ "row"] $ mconcat
+    [ div_ [class_ "columns small-6 large-3"] ""
+    , div_ [class_ "columns small-6 large-3"] ""
+    , div_ [class_ "columns small-6 large-6"] inner
+    ]
+  where
+    inner = template page content
