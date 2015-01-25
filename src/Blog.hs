@@ -7,6 +7,7 @@ import Templates
 import Application.Types
 import UrlPath
 
+import Lucid
 import Lucid.Base
 import Web.Scotty.Trans
 import Text.Pandoc
@@ -30,12 +31,53 @@ handleBlogPosts :: ( MonadIO m
                      -> [FilePath]
                      -> ScottyT LT.Text m ()
 handleBlogPosts mainHtml posts = do
+  pr <- envPrefix <$> lift ask
+
+  -- Handle the index
+  let postMetas :: (MonadIO q, Functor q) => q [Meta]
+      postMetas = mapM (\f -> postFileMeta $ pr <> "blog/" <> f) posts
+      postTitle :: Meta -> T.Text
+      postTitle = T.pack . inlineToString . docTitle
+      summaries :: (MonadIO q, Functor q) => q [HtmlT (AbsoluteUrlT T.Text Identity) ()]
+      summaries = fmap (map (\p -> p_ [] $ toHtmlRaw $ postTitle p)) postMetas
+
+  ( get "/blog" $ do
+    summs <- summaries
+    mainHtml $ mainTemplate
+      (mainPage `appendTitle` "Blog") $
+        mconcat summs
+    )
+
   mapM_ (\x -> handleBlogPost $  x) posts
   where
     handleBlogPost fileName = do
-      pr       <- envPrefix <$> lift ask
+      pr <- envPrefix <$> lift ask
       contents <- liftIO $ readFile $ pr <> "blog/" <> fileName
-      let renderedContents = writeHtmlString def $ readMarkdown def contents
+      let parsedContents = readMarkdown def contents
+          getMeta (Pandoc m _) = m
+          title :: String
+          title   = inlineToString $ docTitle $ getMeta parsedContents
+          authors :: String
+          authors = concatMap inlineToString $
+                      docAuthors $ getMeta parsedContents
+          date :: String
+          date    = inlineToString $ docDate $ getMeta parsedContents
+          renderedContents = writeHtmlString def parsedContents
+
       get (capture $ "/blog/" <> (takeWhile (/= '.') fileName)) $
         mainHtml $ mainTemplate
                     (mainPage `appendTitle` "Blog") $ toHtmlRaw renderedContents
+
+inlineToString :: [Inline] -> String
+inlineToString = foldl (\a x -> a <> inlineToString' x) ""
+  where
+    inlineToString' (Str s) = s
+    inlineToString' (Space) = " "
+    inlineToString' _ = ""
+
+postFileMeta :: MonadIO m => FilePath -> m Meta
+postFileMeta file = do
+  contents <- liftIO $ readFile file
+  return $ getMeta $ readMarkdown def contents
+  where
+    getMeta (Pandoc m _) = m

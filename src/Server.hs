@@ -35,9 +35,6 @@ mainHandler = do
   ( get "/" $ do
     mainHtml $ mainTemplate
       (mainPage `appendTitle` "Home") "aww yea" )
-  ( get "/blog" $ do
-    mainHtml $ mainTemplate
-      (mainPage `appendTitle` "Blog") "Blog" )
   handleBlogPosts mainHtml $ drop 2 postFiles -- remove "." and ".."
 
 mainHtml :: ( MonadReader Env reader
