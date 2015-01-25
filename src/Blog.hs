@@ -11,6 +11,7 @@ import Lucid
 import Lucid.Base
 import Web.Scotty.Trans
 import Text.Pandoc
+import Text.Highlighting.Kate.Styles (espresso)
 import qualified Data.Text as T
 import qualified Data.Text.Lazy as LT
 
@@ -62,7 +63,9 @@ handleBlogPosts mainHtml posts = do
                       docAuthors $ getMeta parsedContents
           date :: String
           date    = inlineToString $ docDate $ getMeta parsedContents
-          renderedContents = writeHtmlString def parsedContents
+          renderedContents = writeHtmlString
+                              def { writerHighlight = True
+                                  , writerHighlightStyle = espresso} $ parsedContents
 
       get (capture $ "/blog/" <> (takeWhile (/= '.') fileName)) $
         mainHtml $ mainTemplate
