@@ -33,6 +33,7 @@ Library
                       , http-types
                       , directory
                       , bytestring
+                      , pandoc
 
 Executable deconfigured
   Default-Language:     Haskell2010
@@ -60,6 +61,7 @@ Executable deconfigured
                       , http-types
                       , directory
                       , bytestring
+                      , pandoc
 
 Test-Suite spec
   Type:                 exitcode-stdio-1.0
