@@ -30,8 +30,9 @@ mainHandler :: ( MonadIO m
                , Functor m
                ) => ScottyT LT.Text m ()
 mainHandler = do
-  pr    <- envPrefix <$> lift ask
+  pr        <- envPrefix <$> lift ask
   postFiles <- liftIO $ getDirectoryContents $ pr <> "blog/"
+  liftIO $ print postFiles
   ( get "/" $ do
     mainHtml $ mainTemplate
       (mainPage `appendTitle` "Home") "aww yea" )
