@@ -14,6 +14,7 @@ import Text.Pandoc
 import Text.Highlighting.Kate.Styles (espresso)
 import qualified Data.Text as T
 import qualified Data.Text.Lazy as LT
+import System.Directory (getDirectoryContents)
 
 import Data.Monoid
 import Data.Functor.Identity
@@ -29,27 +30,34 @@ handleBlogPosts :: ( MonadIO m
                    ) => ( HtmlT (AbsoluteUrlT T.Text Identity) ()
                        -> ActionT LT.Text m ()
                         )
-                     -> [FilePath]
                      -> ScottyT LT.Text m ()
-handleBlogPosts mainHtml posts = do
+handleBlogPosts mainHtml = do
+  let
+    postTitle :: Meta -> T.Text
+    postTitle = T.pack . inlineToString . docTitle
+
   pr <- envPrefix <$> lift ask
+  postFiles <- (filter (\x -> x /= "." && x /= "..")) <$>
+                  (liftIO $ getDirectoryContents $ pr <> "blog/")
+  postMetas <- mapM (\f -> postFileMeta $ pr <> "blog/" <> f) postFiles
+
+  let
+    makeSummary :: FilePath -> Meta -> HtmlT (AbsoluteUrlT T.Text Identity) ()
+    makeSummary file meta =
+      let slug = takeWhile (/= '.') file in
+      li_ [] $
+        a_ [href_ $ "/blog/" <> (T.pack slug)] $
+          toHtmlRaw $ postTitle meta
+    summaries = ul_ [] $ mconcat $ zipWith makeSummary postFiles postMetas
 
   -- Handle the index
-  let postMetas :: (MonadIO q, Functor q) => q [Meta]
-      postMetas = mapM (\f -> postFileMeta $ pr <> "blog/" <> f) posts
-      postTitle :: Meta -> T.Text
-      postTitle = T.pack . inlineToString . docTitle
-      summaries :: (MonadIO q, Functor q) => q [HtmlT (AbsoluteUrlT T.Text Identity) ()]
-      summaries = fmap (map (\p -> p_ [] $ toHtmlRaw $ postTitle p)) postMetas
-
   ( get "/blog" $ do
-    summs <- summaries
     mainHtml $ mainTemplate
       (mainPage `appendTitle` "Blog") $
-        mconcat summs
+        summaries
     )
 
-  mapM_ (\x -> handleBlogPost $  x) posts
+  mapM_ (\x -> handleBlogPost $  x) postFiles
   where
     handleBlogPost fileName = do
       pr <- envPrefix <$> lift ask

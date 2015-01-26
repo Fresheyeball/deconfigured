@@ -73,9 +73,14 @@ appendTitle page x = page { pageTitle = pageTitle page
 mainTemplate :: WebPage (HtmlT (AbsoluteUrlT T.Text Identity) ()) T.Text
              -> HtmlT (AbsoluteUrlT T.Text Identity) ()
              -> HtmlT (AbsoluteUrlT T.Text Identity) ()
-mainTemplate page content = template page $
-  div_ [class_ "row"] $ mconcat
-    [ div_ [class_ "columns small-6 large-3"] ""
-    , div_ [class_ "columns small-6 large-3"] ""
-    , div_ [class_ "columns small-6 large-6"] content
-    ]
+mainTemplate page content = template page $ mconcat
+  [ div_ [class_ "row"] $ a_ [href_ "/"] $ h1_ [id_ "logo"] "DeConfigured"
+  , div_ [class_ "row"] $ mconcat
+      [ div_ [class_ "columns small-12 medium-3 large-2"] $ ul_ [] $ mconcat $
+          map (li_ [])
+            [ a_ [href_ "/"] "Home"
+            , a_ [href_ "/blog"] "Blog"
+            ]
+      , div_ [class_ "columns small-12 medium-9 large-10"] content
+      ]
+  ]

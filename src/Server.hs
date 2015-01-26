@@ -15,7 +15,6 @@ import Web.Scotty.Trans
 import Lucid.Base
 import qualified Data.Text as T
 import qualified Data.Text.Lazy as LT
-import System.Directory (getDirectoryContents)
 import Network.HTTP.Types (notFound404)
 
 import Data.Monoid
@@ -31,11 +30,10 @@ mainHandler :: ( MonadIO m
                ) => ScottyT LT.Text m ()
 mainHandler = do
   pr        <- envPrefix <$> lift ask
-  postFiles <- liftIO $ getDirectoryContents $ pr <> "blog/"
   ( get "/" $ do
     mainHtml $ mainTemplate
       (mainPage `appendTitle` "Home") "aww yea" )
-  handleBlogPosts mainHtml $ filter (\x -> x /= "." && x /= "..") postFiles -- remove "." and ".."
+  handleBlogPosts mainHtml
 
 mainHtml :: ( MonadReader Env reader
             , MonadIO reader

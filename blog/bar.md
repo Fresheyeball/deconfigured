@@ -5,4 +5,5 @@
 Bar
 ===
 
-Yo momma so fat, she likes to dump everyhwere.
+This one time, at band camp, I wrote this really crappy recursive blog post
+about [...](/blog/bar)
