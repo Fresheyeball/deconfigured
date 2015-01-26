@@ -4,4 +4,3 @@
 
 npm update
 npm install
-bash ./runBrowserify.sh

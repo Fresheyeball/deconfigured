@@ -1,13 +1,16 @@
+{-# LANGUAGE BangPatterns #-}
 {-# LANGUAGE OverloadedStrings #-}
 {-# LANGUAGE ExtendedDefaultRules #-}
 
 module Templates where
 
 import Templates.Styles (mainStyle)
+import Templates.Scripts (googleAnalytics)
 
 import UrlPath
 import Web.Page.Lucid
 import Data.Markup
+import Lucid
 import Lucid.Base
 import qualified Data.Text as T
 
@@ -37,6 +40,7 @@ mainPage = def { pageTitle = "DeConfigured"
   inlineBodyScripts = mconcat
     [ deploy JavaScript
         ("$(document).foundation();" :: T.Text)
+    , deploy JavaScript googleAnalytics
     ]
   styles' = renderMarkup cdnStyles
          <> renderMarkup inlineStyles
@@ -69,5 +73,9 @@ appendTitle page x = page { pageTitle = pageTitle page
 mainTemplate :: WebPage (HtmlT (AbsoluteUrlT T.Text Identity) ()) T.Text
              -> HtmlT (AbsoluteUrlT T.Text Identity) ()
              -> HtmlT (AbsoluteUrlT T.Text Identity) ()
-mainTemplate page content =
-  template page content
+mainTemplate page content = template page $
+  div_ [class_ "row"] $ mconcat
+    [ div_ [class_ "columns small-6 large-3"] ""
+    , div_ [class_ "columns small-6 large-3"] ""
+    , div_ [class_ "columns small-6 large-6"] content
+    ]

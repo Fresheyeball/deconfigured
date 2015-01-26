@@ -1,7 +1,7 @@
-{-# LANGUAGE OverloadedStrings #-}
-{-# LANGUAGE ExtendedDefaultRules #-}
-{-# LANGUAGE ScopedTypeVariables #-}
 {-# LANGUAGE FlexibleContexts #-}
+{-# LANGUAGE OverloadedStrings #-}
+{-# LANGUAGE ScopedTypeVariables #-}
+{-# LANGUAGE ExtendedDefaultRules #-}
 
 module Application where
 
@@ -33,15 +33,17 @@ application :: ( MonadReader Env m
                , Functor m
                ) => ScottyT LT.Text m ()
 application = do
-  middleware $ staticPolicy (noDots >-> addBase "/opt/deconfigured/static")
+  pr <- envPrefix <$> lift ask
+  middleware $ staticPolicy (noDots >-> (addBase $ pr <> "static"))
   mainHandler
   notFound $ do
     (root :: T.Text) <- (T.pack . envHostname) <$> lift ask
 
     let redirPage :: Monad m => WebPage (HtmlT m ()) T.Text
-        redirPage = let page = mainPage { metaVars = meta_ [ makeAttribute "http-equiv" "refresh"
-                                                           , content_ $ "3;url=" <> root
-                                                           ]
+        redirPage = let page = mainPage { metaVars = meta_
+                          [ makeAttribute "http-equiv" "refresh"
+                          , content_ $ "3;url=" <> root
+                          ]
                                         }
                     in
                     appendTitle page "Not Found"
