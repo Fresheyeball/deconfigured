@@ -69,7 +69,8 @@ handleBlogPosts mainHtml posts = do
 
       get (capture $ "/blog/" <> (takeWhile (/= '.') fileName)) $
         mainHtml $ mainTemplate
-                    (mainPage `appendTitle` "Blog") $ toHtmlRaw renderedContents
+                    (mainPage `appendTitle` "Blog" `appendTitle` T.pack title) $
+                      toHtmlRaw renderedContents
 
 inlineToString :: [Inline] -> String
 inlineToString = foldl (\a x -> a <> inlineToString' x) ""

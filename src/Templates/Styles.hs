@@ -18,27 +18,41 @@ body {
   background: white;
 }
 
-pre {
-  background-color: #FDF6E3;
-  padding: 0.1rem;
+code {
+  white-space: pre;
 }
 
-.sourceCode .kw { color: #268BD2; }
-.sourceCode .dt { color: #268BD2; }
-
-.sourceCode .dv, .sourceCode .bn, .sourceCode .fl { color: #D33682; }
-.sourceCode .ch { color: #DC322F; }
-.sourceCode .st { color: #2AA198; }
-.sourceCode .co { color: #93A1A1; }
-.sourceCode .ot { color: #A57800; }
-.sourceCode .al { color: #CB4B16; font-weight: bold; }
-.sourceCode .fu { color: #268BD2; }
-.sourceCode .re { }
-.sourceCode .er { color: #D30102; font-weight: bold; }
-
-.sourceCode span {
+table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
   margin: 0;
   padding: 0;
+  vertical-align: baseline;
+  border: none;
 }
+table.sourceCode {
+  width: 100%;
+  line-height: 100%;
+}
+td.lineNumbers {
+  text-align: right;
+  padding-right: 4px;
+  padding-left: 4px;
+  color: #aaaaaa;
+  border-right: 1px solid #aaaaaa;
+}
+td.sourceCode {
+  padding-left: 5px;
+}
+code > span.kw { color: #007020; font-weight: bold; }
+code > span.dt { color: #902000; }
+code > span.dv { color: #40a070; }
+code > span.bn { color: #40a070; }
+code > span.fl { color: #40a070; }
+code > span.ch { color: #4070a0; }
+code > span.st { color: #4070a0; }
+code > span.co { color: #60a0b0; font-style: italic; }
+code > span.ot { color: #007020; }
+code > span.al { color: #ff0000; font-weight: bold; }
+code > span.fu { color: #06287e; }
+code > span.er { color: #ff0000; font-weight: bold; }
 
   |]

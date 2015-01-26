@@ -73,11 +73,9 @@ appendTitle page x = page { pageTitle = pageTitle page
 mainTemplate :: WebPage (HtmlT (AbsoluteUrlT T.Text Identity) ()) T.Text
              -> HtmlT (AbsoluteUrlT T.Text Identity) ()
              -> HtmlT (AbsoluteUrlT T.Text Identity) ()
-mainTemplate page content =
+mainTemplate page content = template page $
   div_ [class_ "row"] $ mconcat
     [ div_ [class_ "columns small-6 large-3"] ""
     , div_ [class_ "columns small-6 large-3"] ""
-    , div_ [class_ "columns small-6 large-6"] inner
+    , div_ [class_ "columns small-6 large-6"] content
     ]
-  where
-    inner = template page content
