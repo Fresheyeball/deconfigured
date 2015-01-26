@@ -36,7 +36,7 @@ mainHandler = do
   ( get "/" $ do
     mainHtml $ mainTemplate
       (mainPage `appendTitle` "Home") "aww yea" )
-  handleBlogPosts mainHtml $ drop 2 postFiles -- remove "." and ".."
+  handleBlogPosts mainHtml $ filter (\x -> x /= "." && x /= "..") postFiles -- remove "." and ".."
 
 mainHtml :: ( MonadReader Env reader
             , MonadIO reader
