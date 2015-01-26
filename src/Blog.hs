@@ -39,8 +39,8 @@ handleBlogPosts mainHtml = do
   pr <- envPrefix <$> lift ask
   postFiles <- (filter (\x -> x /= "." && x /= "..")) <$>
                   (liftIO $ getDirectoryContents $ pr <> "blog")
-  liftIO $ print postFiles
   postMetas <- mapM (\f -> postFileMeta $ pr <> "blog/" <> f) postFiles
+  liftIO $ print postMetas
 
   let
     makeSummary :: FilePath -> Meta -> HtmlT (AbsoluteUrlT T.Text Identity) ()
