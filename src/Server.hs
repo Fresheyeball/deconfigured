@@ -32,7 +32,6 @@ mainHandler :: ( MonadIO m
 mainHandler = do
   pr        <- envPrefix <$> lift ask
   postFiles <- liftIO $ getDirectoryContents $ pr <> "blog/"
-  liftIO $ print postFiles
   ( get "/" $ do
     mainHtml $ mainTemplate
       (mainPage `appendTitle` "Home") "aww yea" )

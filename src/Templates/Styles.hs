@@ -18,8 +18,17 @@ body {
   background: white;
 }
 
+pre {
+  border: 1px solid gray;
+}
+
 code {
   white-space: pre;
+  width: 100%;
+}
+
+pre code {
+  display: inline-block;
 }
 
 table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
