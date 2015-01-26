@@ -37,7 +37,7 @@ handleBlogPosts mainHtml = do
     postTitle = T.pack . inlineToString . docTitle
 
   pr <- envPrefix <$> lift ask
-  -- liftIO $ print $ pr <> "blog/"
+  liftIO $ print $ pr <> "blog"
   postFiles <- (filter (\x -> x /= "." && x /= "..")) <$>
                   (liftIO $ getDirectoryContents $ pr <> "blog")
   postMetas <- mapM (\f -> postFileMeta $ pr <> "blog/" <> f) postFiles
