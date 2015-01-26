@@ -65,7 +65,9 @@ handleBlogPosts mainHtml posts = do
           date    = inlineToString $ docDate $ getMeta parsedContents
           renderedContents = writeHtmlString
                               def { writerHighlight = True
-                                  , writerHighlightStyle = espresso} $ parsedContents
+                                  , writerHighlightStyle = espresso
+                                  , writerHtml5 = True
+                                  , writerTableOfContents = True } $ parsedContents
 
       get (capture $ "/blog/" <> (takeWhile (/= '.') fileName)) $
         mainHtml $ mainTemplate
