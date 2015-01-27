@@ -25,6 +25,7 @@ Library
   Build-Depends:        base >= 4 && < 5
                       , scotty >= 0.9
                       , wai-middleware-static
+                      , wai-extra
                       , lucid
                       , text
                       , mtl
@@ -52,6 +53,7 @@ Executable deconfigured
                       , optparse-applicative
                       , scotty >= 0.9
                       , wai-middleware-static
+                      , wai-extra
                       , lucid
                       , yaml
                       , aeson

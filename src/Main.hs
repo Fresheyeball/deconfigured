@@ -11,6 +11,7 @@ import qualified Data.Yaml as Y
 import qualified Data.Aeson.Types as A
 import           Web.Scotty.Trans hiding (header)
 import qualified Data.Text as T
+import Network.Wai.Middleware.RequestLogger (logStdoutDev)
 
 import System.Directory
 import System.IO
@@ -151,5 +152,6 @@ entry port env = do
 
   scottyT port
     hostConf
-    hostConf
-    application
+    hostConf $ do
+      middleware logStdoutDev
+      application
