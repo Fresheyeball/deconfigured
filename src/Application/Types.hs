@@ -4,3 +4,4 @@ module Application.Types where
 data Env = Env
   { envPrefix :: String
   , envHostname :: String }
+    deriving (Show, Eq)

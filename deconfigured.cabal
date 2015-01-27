@@ -14,8 +14,14 @@ Library
   HS-Source-Dirs:       src
   GHC-Options:          -Wall
   Exposed-Modules:      Application
+                        Application.Types
                         Server
-  Other-Modules:        Server.Internal
+                        Server.Utils
+                        Blog
+                        Blog.Types
+                        Templates
+                        Templates.Scripts
+                        Templates.Styles
   Build-Depends:        base >= 4 && < 5
                       , scotty >= 0.9
                       , wai-middleware-static

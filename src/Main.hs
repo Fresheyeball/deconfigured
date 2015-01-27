@@ -27,7 +27,7 @@ data AppOpts = AppOpts
   { port :: Maybe Int
   , host :: Maybe String
   , prefix :: Maybe String }
-  deriving Generic
+  deriving (Show, Eq, Generic)
 
 -- | Like a monoid, but as a "setter"
 class Override a where
@@ -55,6 +55,7 @@ instance Y.FromJSON AppOpts where
 instance Default AppOpts where
   def = AppOpts (Just 3000) (Just "http://localhost") (Just "./")
 
+-- | Command-invocation parser for ubiquitous options
 appOpts :: Parser AppOpts
 appOpts = AppOpts
   <$> optional ( option auto
@@ -76,7 +77,9 @@ appOpts = AppOpts
 data App = App
   { options :: AppOpts
   , configPath :: Maybe String }
+    deriving (Show, Eq)
 
+-- | Completed command invocation parser
 app :: Parser App
 app = App
   <$> appOpts
@@ -112,6 +115,7 @@ main = do
         def
         mYamlConfig
 
+      -- Merge command-line and config file options
       config :: AppOpts
       config =
         (def `override` yamlConfig)
@@ -136,13 +140,14 @@ appOptsToEnv (AppOpts Nothing _ _) =
 
 -- | Entry point, post options parsing
 entry :: Int -> Env -> IO ()
-entry port env =
+entry port env = do
   let -- Access the url root from a @ScottyT@ or @ActionT@ expression with
       -- @(root :: T.Text) <- lift ask@.
       hostConf :: ReaderT Env m a -> m a
       hostConf =
         flip runReaderT env
-  in
+
+  putStrLn $ "Using Environment: " <> show env
 
   scottyT port
     hostConf

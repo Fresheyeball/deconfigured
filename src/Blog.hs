@@ -5,6 +5,7 @@ module Blog where
 
 import Templates
 import Application.Types
+import Server.Utils (mainHtml)
 import UrlPath
 
 import Lucid
@@ -27,11 +28,8 @@ import Control.Monad.Reader.Class
 handleBlogPosts :: ( MonadIO m
                    , MonadReader Env m
                    , Functor m
-                   ) => ( HtmlT (AbsoluteUrlT T.Text Identity) ()
-                       -> ActionT LT.Text m ()
-                        )
-                     -> ScottyT LT.Text m ()
-handleBlogPosts mainHtml = do
+                   ) => ScottyT LT.Text m ()
+handleBlogPosts = do
   let
     postTitle :: Meta -> T.Text
     postTitle = T.pack . inlineToString . docTitle
@@ -40,7 +38,7 @@ handleBlogPosts mainHtml = do
   postFiles <- (filter (\x -> x /= "." && x /= "..")) <$>
                   (liftIO $ getDirectoryContents $ pr <> "blog")
   postMetas <- mapM (\f -> postFileMeta $ pr <> "blog/" <> f) postFiles
-  liftIO $ print postMetas
+  -- liftIO $ print postMetas
 
   let
     makeSummary :: FilePath -> Meta -> HtmlT (AbsoluteUrlT T.Text Identity) ()
