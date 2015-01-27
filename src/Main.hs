@@ -135,7 +135,7 @@ main = do
 -- @def@ beforehand.
 appOptsToEnv :: AppOpts -> Env
 appOptsToEnv (AppOpts (Just p) (Just h) (Just pr)) =
-  Env pr $ h <> ":" <> show p
+  Env pr $ h
 appOptsToEnv (AppOpts Nothing _ _) =
   error "default overrides failed somehow... VOODOO"
 
