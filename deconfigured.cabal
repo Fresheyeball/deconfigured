@@ -41,6 +41,7 @@ Library
                       , bytestring
                       , pandoc
                       , highlighting-kate
+                      , blaze-markup
 
 Executable deconfigured
   Default-Language:     Haskell2010
@@ -70,6 +71,7 @@ Executable deconfigured
                       , bytestring
                       , pandoc
                       , highlighting-kate
+                      , blaze-markup
 
 Test-Suite spec
   Type:                 exitcode-stdio-1.0

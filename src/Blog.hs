@@ -16,6 +16,7 @@ import Text.Highlighting.Kate.Styles (espresso)
 import qualified Data.Text as T
 import qualified Data.Text.Lazy as LT
 import System.Directory (getDirectoryContents)
+import Text.Blaze.Renderer.Text (renderMarkup)
 
 import Data.Monoid
 import Data.Functor.Identity
@@ -70,7 +71,7 @@ handleBlogPosts = do
                       docAuthors $ getMeta parsedContents
           date :: String
           date    = inlineToString $ docDate $ getMeta parsedContents
-          renderedContents = writeHtmlString
+          renderedContents = renderMarkup $ writeHtml
                               def { writerHighlight = True
                                   , writerHighlightStyle = espresso
                                   , writerHtml5 = True
