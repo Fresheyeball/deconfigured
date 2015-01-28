@@ -32,5 +32,5 @@ mainHandler = do
   pr <- envPrefix <$> lift ask
   ( get "/" $ do
     mainHtml $ mainTemplate
-      (mainPage `appendTitle` "Home") "aww yea" )
+      (mainPage `appendTitle` "Home") "home" )
   handleBlogPosts

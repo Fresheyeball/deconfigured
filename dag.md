@@ -45,7 +45,7 @@ with the `unique` value - just `ENil`, but type-coercing for unique schemas.
 If we check out the type of `edges`, its nutty:
 
 ```haskell
-> :t edges
+λ> :t edges
 
 -- Note these are promoted
 edges ::
@@ -68,7 +68,7 @@ The last parameter is just a switch for uniqueness.
 For instance, check out what happens when we add another edge:
 
 ```haskell
-> :t ECons (Edge :: EdgeValue "foo" "qux") edges
+λ> :t ECons (Edge :: EdgeValue "foo" "qux") edges
 
 ECons (Edge :: EdgeValue "foo" "qux") edges ::
   EdgeSchema
@@ -82,13 +82,13 @@ We achieve type-safety of acyclicity through existential constraints on GADT
 data constructors and type families on resulting types. Check out `ECons`:
 
 ```haskell
-> :t ECons
+λ> :t ECons
 
 ECons ::
   Acceptable (EdgeType from to) oldLoops unique =>
-    EdgeValue from to              -- Edge to add
+    EdgeValue from to -- Edge to add
  -> EdgeSchema old oldLoops unique -- older edges
- -> EdgeSchema                     -- result
+ -> EdgeSchema -- result
       (EdgeType from to : old)
       (DisallowIn (EdgeType from to) oldLoops 'False)
       unique
