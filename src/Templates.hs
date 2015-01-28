@@ -87,4 +87,6 @@ mainTemplate page content = template page $ mconcat
              , id_ "content"
              ] content
       ]
+  , div_ [class_ "row"] $ footer_ $
+      p_ [] $ toHtmlRaw "Copyright &copy; 2015 Athan Clark, All Rights Reserved"
   ]

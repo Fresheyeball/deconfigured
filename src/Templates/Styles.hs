@@ -25,23 +25,41 @@ body {
 
 #content {
   background: #e6c0ad;
+  padding-bottom: 1rem;
+}
+
+footer {
+  padding: 1rem;
+  text-align: right;
 }
 
 blockquote {
   border-left: 1rem solid #c49986;
+  background: #d1ad9e;
+}
+
+blockquote code {
+  background: #dcbeb6;
+  border: 1px solid #e4cdc6;
 }
 
 h1 {
   margin-left: 2rem;
 }
 
+h2 {
+  text-decoration: underline;
+}
+
 h3 {
   text-align: right;
-  marign-right: 3rem;
+  margin-right: 3rem;
+  font-family: "Liberation Serif", serif;
+  font-style: italic;
 }
 
 a, a:link, a:active, a:visited {
-  color: #ab673a;
+  color: #95502d;
   text-decoration: none;
 }
 
@@ -51,7 +69,7 @@ a:hover {
 }
 
 pre {
-  border: 2px solid #ac9a8c;
+  margin-bottom: 1rem;
 }
 
 code {
