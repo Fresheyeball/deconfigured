@@ -79,7 +79,13 @@ handleBlogPosts = do
     handleBlogPost fileName = do
       pr <- envPrefix <$> lift ask
       contents <- liftIO $ readFile $ pr <> "blog/" <> fileName
-      let parsedContents = readMarkdown def contents
+      let parsedContents = readMarkdown
+                            def { readerExtensions = readerExtensions def
+                                                  -- <> githubMarkdownExtensions
+                                                  <> multimarkdownExtensions
+                                                  <> phpMarkdownExtraExtensions
+                                                  <> pandocExtensions
+                                } contents
           getMeta (Pandoc m _) = m
           title :: String
           title   = inlineToString $ docTitle $ getMeta parsedContents
@@ -92,7 +98,7 @@ handleBlogPosts = do
                               def { writerHighlight = True
                                   , writerHighlightStyle = espresso
                                   , writerHtml5 = True
-                                  , writerTableOfContents = True } $ parsedContents
+                                  } $ parsedContents
 
       get (capture $ "/blog/" <> (takeWhile (/= '.') fileName)) $
         mainHtml $ mainTemplate

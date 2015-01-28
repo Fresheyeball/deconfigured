@@ -12,11 +12,10 @@ perplexed on how to model acyclic graphs in a _type safe_ way. However, in
 Haskell, it's not obvious how we would declare such a type. Most of what we have
 is structural recursion through (G)ADTs, which is closer tree structures than
 sets or graphs. Since that day of disapointment in my perusal of
-[hackage](https://hackage.haskell.org)
-, I vowed in my heart to make a directed acyclic graph library worthy of
-awe; my quest would cost me my sanct, my prosperity, nay, my eyeglass
-perscription. Alas, ye shall see the fruits of dangerous obsession with type
-safety - __uselessness__.
+[hackage](https://hackage.haskell.org), I vowed in my heart to make a directed
+acyclic graph library worthy of awe; my quest would cost me my sanct, my
+prosperity, nay, my eyeglass prescription. Alas, thou shalt bear witness to the
+fruits of dangerous obsession with type safety - __uselessness__.
 
 ...kinda.
 
@@ -294,6 +293,126 @@ connections obviously terminate) in one value. It's simply a list of rose trees
 (rose forest), like so:
 
 ```haskell
+-- Defined at src/Data/Graph/DAG/Edge/Utils.hs:29:1
 data RTree a = a :@-> [RTree a]
   deriving (Show, Eq)
 ```
+
+If we promote this with `-XDataKinds` like before, we get what we've been using
+up til now; a kind `RTree` with inhabitant type `':@->`. I made a pretty
+complicated `SpanningTrees` type function, it takes a list of edges and
+returns a rose tree of `GHC.TypeLits.Symbol`s. I suggest trying to decipher
+how it works as an exercise for the reader. Hint - manual folds.
+
+Now, we have a pretty easy method of storing type-family results in values -
+`Data.Proxy`. It gives us a dummy data constructor, but with a polymorphic
+type parameter:
+
+```haskell
+data Proxy a = Proxy
+```
+
+An interesting thing about value-level functions is that even with `-XPolyKinds`,
+`(->)` (at the value level) still uses `*`:
+
+```haskell
+> :set -XPolyKinds
+> :k (->)
+
+(->) :: * -> * -> *
+```
+
+I mean, how else could we pattern match on anything? Promoted types __don't have
+any inhabitants__ (except with `singletons` ... hold on.). This is what `Proxy`
+gives us - a way to wrap non-`*` types in a `*` value for runtime functions:
+
+```haskell
+-- Defined at src/Data/Graph/DAG/Edge/Utils.hs:120:1
+getSpanningTrees :: EdgeSchema es x unique -> Proxy (SpanningTrees es)
+getSpanningTrees _ = Proxy
+```
+
+Note that `SpanningTrees` is really doing all the work, here. Then we just
+hand-off the proxy.
+
+### Reflection
+
+So `-DataKinds` gives us automatic reification, but how do we come back to
+runtime-land? With Singletons!
+
+I recently asked a question
+[on stack overflow](http://stackoverflow.com/questions/28030118/reflecting-heterogeneous-promoted-types-back-to-values-compositionally)
+(while developing this lib...), and got a wonderful response from Andras Kovacs
+(sorry, I can't get pandoc to handle unicode yet :c).
+Basically, we hand-off the type inside `Proxy` to a type-function `Demote`
+that handles most of the hard work. Something very interesting about the
+implementation of singletons is the `KProxy` - a poly-kinded proxy, which
+he used to capture / constraint instances of promoted singletons _only_. Then
+it was pretty straight forward:
+
+```haskell
+-- Defined at src/Data/Graph/DAG/Edge/Utils.hs:52:1
+reflect ::
+  forall (a :: k).
+  (SingI a, SingKind ('KProxy :: KProxy k)) =>
+  Proxy a -> Demote a
+reflect _ = fromSing (sing :: Sing a)
+```
+
+Now we can come back down to runtime-land:
+
+```haskell
+-- Defined at src/Data/Graph/DAG/Edge/Utils.hs:125:1
+espanningtrees :: SingI (SpanningTrees' es '[]) =>
+                  EdgeSchema es x unique
+               -> Demote (SpanningTrees' es '[])
+espanningtrees = reflect . getSpanningTrees
+```
+
+Something also pretty interesting is we have (basically) a type-level thunk
+with `Demote` - this has to do with closed type families. Basically, closed
+type families won't reduce unless if input types can be matched on uniquely
+(please read the paper for details).
+
+If you look at the stack overflow question, you'll see that the definition of
+`Demote` indeed is pretty ambiguous. So how do we use the values?
+
+...we... well.. just, do:
+
+```haskell
+-- Defined at src/Data/Graph/DAG/Edge/Utils.hs:131:1
+etree :: SingI (SpanningTrees' es '[]) =>
+         String -> EdgeSchema es x unique -> Maybe (RTree String)
+etree k es = getTree k $ espanningtrees es
+  where
+  getTree k1 ( n@(k2 :@-> xs) : ns ) | k1 == k2 = Just n
+                                     | otherwise = getTree k1 ns
+  getTree _ [] = Nothing
+```
+
+aaand for some reason this type checks :)
+
+We can then flip back and build a list of edges out of values, to really
+"reflect" the list of edges in our `EdgeSchema` to a list of pairs:
+
+```haskell
+-- Defined at src/Data/Graph/DAG/Edge/Utils.hs:174:1
+fcEdges :: SingI (SpanningTrees' es '[]) =>
+           EdgeSchema es x 'True -> [(String, String)]
+fcEdges = eForestToEdges . espanningtrees
+```
+
+## Bonus
+
+Remember how I said there would be something funny happening if we tried to
+make the graph poly-kinded in it's key type? It seems like it should be pretty
+simple, right? Clone the repo and try it :)
+
+---
+
+### Moral Of The Story
+
+_Closed_ type families and Constraints are wonderful tools for type-level
+programming. However, if we get ahead of ourselves, we find that things
+diverge and become un-unifiable pretty quickly. I hope this post gave you
+something valuable! Much love, yo!

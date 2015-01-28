@@ -34,6 +34,10 @@ footer {
   text-align: right;
 }
 
+#logo {
+  color: #95502d;
+}
+
 blockquote {
   border-left: 1rem solid #c49986;
   background: #d1ad9e;
