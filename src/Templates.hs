@@ -1,4 +1,5 @@
 {-# LANGUAGE BangPatterns #-}
+{-# LANGUAGE FlexibleContexts #-}
 {-# LANGUAGE OverloadedStrings #-}
 {-# LANGUAGE ExtendedDefaultRules #-}
 
@@ -19,8 +20,8 @@ import Data.Default
 import Data.Functor.Identity
 
 -- | This is the default main template.
-mainPage :: Monad m =>
-            WebPage (HtmlT m ()) T.Text
+mainPage :: ( Monad m
+            ) => WebPage (HtmlT (AbsoluteUrlT T.Text m) ()) T.Text
 mainPage = def { pageTitle = "DeConfigured"
                , bodyScripts = bodyScripts'
                , styles = styles'
@@ -43,6 +44,7 @@ mainPage = def { pageTitle = "DeConfigured"
     , deploy JavaScript googleAnalytics
     ]
   styles' = renderMarkup cdnStyles
+        --  <> renderMarkup localStyles
          <> renderMarkup inlineStyles
   cdnStyles :: Monad m => HostedMarkupM (HtmlT m ())
   cdnStyles = mconcat
@@ -55,6 +57,12 @@ mainPage = def { pageTitle = "DeConfigured"
   inlineStyles = mconcat
     [ deploy Css mainStyle
     ]
+  -- localStyles :: ( Monad m
+  --                , Url T.Text w
+  --                ) => LocalMarkupM (HtmlT (w T.Text m) ())
+  -- localStyles = mconcat
+  --   [ deploy Css (plainUrl "css/cardinal/css/main.css" :: UrlString T.Text)
+  --   ]
   afterStylesScripts' = renderMarkup cdnStylesScripts
   cdnStylesScripts :: Monad m => HostedMarkupM (HtmlT m ())
   cdnStylesScripts = mconcat

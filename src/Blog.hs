@@ -3,6 +3,8 @@
 
 module Blog where
 
+import Blog.Types
+
 import Templates
 import Application.Types
 import Server.Utils (mainHtml)
@@ -21,10 +23,14 @@ import Text.Blaze.Renderer.Text (renderMarkup)
 import Data.Monoid
 import Data.Functor.Identity
 import Data.Default
+import Data.Maybe (fromJust)
 import Control.Applicative
 import Control.Monad.IO.Class
 import Control.Monad.Trans
 import Control.Monad.Reader.Class
+import System.Time
+import System.Time.ParseDate (parseCalendarTime)
+import System.Locale
 
 handleBlogPosts :: ( MonadIO m
                    , MonadReader Env m
@@ -34,6 +40,12 @@ handleBlogPosts = do
   let
     postTitle :: Meta -> T.Text
     postTitle = T.pack . inlineToString . docTitle
+    postDate :: Meta -> String
+    postDate = formatCalendarTime defaultTimeLocale "%A, %B %e, %Y"
+             . fromJust
+             . parseCalendarTime defaultTimeLocale "%m/%d/%Y"
+             . inlineToString
+             . docDate
 
   pr <- envPrefix <$> lift ask
   postFiles <- (filter (\x -> x /= "." && x /= "..")) <$>
@@ -42,13 +54,18 @@ handleBlogPosts = do
   -- liftIO $ print postMetas
 
   let
-    makeSummary :: FilePath -> Meta -> HtmlT (AbsoluteUrlT T.Text Identity) ()
-    makeSummary file meta =
+    makeSummary :: Meta -> FilePath -> HtmlT (AbsoluteUrlT T.Text Identity) ()
+    makeSummary meta file =
       let slug = takeWhile (/= '.') file in
-      li_ [] $
-        a_ [href_ $ "/blog/" <> (T.pack slug)] $
-          toHtmlRaw $ postTitle meta
-    summaries = ul_ [] $ mconcat $ zipWith makeSummary postFiles postMetas
+      li_ [] $ mconcat
+        [ a_ [href_ $ "/blog/" <> (T.pack slug)] $
+            toHtmlRaw $ postTitle meta
+        , " - "
+        , em_ [class_ "date"] $ toHtmlRaw $ postDate meta
+        ]
+
+    summaries = ul_ [] $ mconcat $ map (uncurry makeSummary) $
+                  sortMetaMap $ zip postMetas postFiles
 
   -- Handle the index
   ( get "/blog" $ do
@@ -81,13 +98,6 @@ handleBlogPosts = do
         mainHtml $ mainTemplate
                     (mainPage `appendTitle` "Blog" `appendTitle` T.pack title) $
                       toHtmlRaw renderedContents
-
-inlineToString :: [Inline] -> String
-inlineToString = foldl (\a x -> a <> inlineToString' x) ""
-  where
-    inlineToString' (Str s) = s
-    inlineToString' (Space) = " "
-    inlineToString' _ = ""
 
 postFileMeta :: MonadIO m => FilePath -> m Meta
 postFileMeta file = do

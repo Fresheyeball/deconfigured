@@ -1,6 +1,6 @@
 %Dag
 %Athan Clark
-%1-26-2015
+%1/26/2015
 
 DAG
 ===
@@ -269,6 +269,8 @@ transitive connections.
 We then handle exhausted searches, both when `from` was found and not. It has
 simple code.
 
+---
+
 ## Sub-Conclusion
 
 With this tooling, we can now construct compile-time acyclic graphs, but...
@@ -287,7 +289,7 @@ __Pure insanity.__
 
 ## Pure Insanity
 
-Okay, so a graph's spanning trees can encode all it's connections (and acyclic
+Okay, so a graph's spanning trees can encode all it's connections (and, acyclic
 connections obviously terminate) in one value. It's simply a list of rose trees
 (rose forest), like so:
 

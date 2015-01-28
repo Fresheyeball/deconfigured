@@ -37,11 +37,20 @@ footer {
 blockquote {
   border-left: 1rem solid #c49986;
   background: #d1ad9e;
+  padding-bottom: 0.5rem;
 }
 
 blockquote code {
   background: #dcbeb6;
   border: 1px solid #e4cdc6;
+}
+
+blockquote p:last-child {
+  margin-bottom: 0;
+}
+
+hr {
+  border: 2px solid #d1ad9e;
 }
 
 h1 {
@@ -54,9 +63,11 @@ h2 {
 
 h3 {
   text-align: right;
-  margin-right: 3rem;
+  padding-right: 3rem;
+  margin-left: 3rem;
   font-family: "Liberation Serif", serif;
   font-style: italic;
+  box-shadow: inset 0 -15px 0 #D1AD9E;
 }
 
 a, a:link, a:active, a:visited {
@@ -77,10 +88,14 @@ code {
   white-space: pre;
   width: 100%;
   background: #e3cbbe;
+  border-radius: 0.25rem;
+  border: 1px solid #eed4ca;
 }
 
 pre code {
   display: inline-block;
+  border-radius: 0.5rem;
+  border: 1px solid #d9a995;
 }
 
 table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
@@ -115,5 +130,9 @@ code > span.ot { color: #007020; }
 code > span.al { color: #ff0000; font-weight: bold; }
 code > span.fu { color: #06287e; }
 code > span.er { color: #ff0000; font-weight: bold; }
+
+.date {
+  color: #434343;
+}
 
   |]

@@ -17,6 +17,11 @@ cabal.sandbox.config
 
 node_modules
 
+# Bower
+#=======
+
+static/css
+
 # Application
 #=============
 
