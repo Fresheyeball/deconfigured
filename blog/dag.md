@@ -245,12 +245,12 @@ type family DisallowIn
               ( oldLoops :: [(Symbol, [Symbol])] )
               (keyFoundYet :: Bool) :: [(Symbol, [Symbol])] where
   DisallowIn (EdgeType from to) ( (from, xs) : es) False =
-    (from, (to : xs)) :                       -- add @to@ to transitively
-                                              -- connected list
+    (from, (to : xs)) : -- add @to@ to transitively
+                        -- connected list
       (DisallowIn (EdgeType from to) es True) -- continue
   DisallowIn (EdgeType from to) ( (key, vs) : es ) keyFoundYet =
-    (key, (PrependIfElem from to vs)) :              -- add `from` to `vs` if
-                                                     -- `to` is an `elem`
+    (key, (PrependIfElem from to vs)) : -- add `from` to `vs` if
+                                        -- `to` is an `elem`
       (DisallowIn (EdgeType from to) es keyFoundYet) -- continue
   DisallowIn a [] True                   = [] -- search over.
   DisallowIn (EdgeType from to) [] False = [(from, [to])]

@@ -57,7 +57,7 @@ handleBlogPosts = do
         summaries
     )
 
-  mapM_ (\x -> handleBlogPost $  x) postFiles
+  mapM_ handleBlogPost postFiles
   where
     handleBlogPost fileName = do
       pr <- envPrefix <$> lift ask
