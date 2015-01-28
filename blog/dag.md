@@ -28,8 +28,8 @@ on [hackage](https://hackage.haskell.org/package/dag).
 
 > You can't even pattern match on our type-safe construction, but we can
 > extract the spanning trees from an `EdgeSchema`. The most I could see this
-> useful for is an authentication scheme for a website - having many-many (but
-> acyclic) dependency chains of access groups. That should come shortly.
+> useful for is an authentication scheme for a website - having many-to-many (yet
+> acyclic) dependency chains of ACL groups. That lib should come shortly.
 
 ## Overview
 
