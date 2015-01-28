@@ -49,8 +49,12 @@ blockquote p:last-child {
   margin-bottom: 0;
 }
 
+blockquote p {
+  color: #555;
+}
+
 hr {
-  border: 2px solid #d1ad9e;
+  border: 0.5rem solid #d1ad9e;
 }
 
 h1 {
@@ -68,7 +72,7 @@ h3 {
   margin-left: 3rem;
   font-family: "Liberation Serif", serif;
   font-style: italic;
-  box-shadow: inset 0 -20px 0 #D1AD9E;
+  box-shadow: inset 0 -1.25rem 0 #D1AD9E;
 }
 
 a, a:link, a:active, a:visited {
