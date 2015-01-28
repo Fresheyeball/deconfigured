@@ -76,11 +76,15 @@ mainTemplate :: WebPage (HtmlT (AbsoluteUrlT T.Text Identity) ()) T.Text
 mainTemplate page content = template page $ mconcat
   [ div_ [class_ "row"] $ a_ [href_ "/"] $ h1_ [id_ "logo"] "DeConfigured"
   , div_ [class_ "row"] $ mconcat
-      [ div_ [class_ "columns small-12 medium-3 large-2"] $ ul_ [] $ mconcat $
+      [ div_ [ class_ "columns small-12 medium-3 large-2"
+             , id_ "nav"
+             ] $ ul_ [] $ mconcat $
           map (li_ [])
             [ a_ [href_ "/"] "Home"
             , a_ [href_ "/blog"] "Blog"
             ]
-      , div_ [class_ "columns small-12 medium-9 large-10"] content
+      , div_ [ class_ "columns small-12 medium-9 large-10"
+             , id_ "content"
+             ] content
       ]
   ]

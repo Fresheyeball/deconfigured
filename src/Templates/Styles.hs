@@ -15,16 +15,49 @@ mainStyle = renderCss $ mainStyle' undefined
   mainStyle' = [lucius|
 
 body {
-  background: white;
+  background: #b67a52;
+}
+
+#nav {
+  padding-top: 1rem;
+  background: #d9a084;
+}
+
+#content {
+  background: #e6c0ad;
+}
+
+blockquote {
+  border-left: 1rem solid #c49986;
+}
+
+h1 {
+  margin-left: 2rem;
+}
+
+h3 {
+  text-align: right;
+  marign-right: 3rem;
+}
+
+a, a:link, a:active, a:visited {
+  color: #ab673a;
+  text-decoration: none;
+}
+
+a:hover {
+  color: #cd6942;
+  text-decoration: none;
 }
 
 pre {
-  border: 1px solid gray;
+  border: 2px solid #ac9a8c;
 }
 
 code {
   white-space: pre;
   width: 100%;
+  background: #e3cbbe;
 }
 
 pre code {
