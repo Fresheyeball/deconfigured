@@ -25,6 +25,7 @@ body {
 
 #content {
   background: #e6c0ad;
+  padding-top: 1rem;
   padding-bottom: 1rem;
 }
 
