@@ -70,8 +70,10 @@ handleBlogPosts = do
   -- Handle the index
   ( get "/blog" $ do
     mainHtml $ mainTemplate
-      (mainPage `appendTitle` "Blog") $
-        summaries
+      (mainPage `appendTitle` "Blog") $ mconcat
+        [ h1_ [] "Blog Posts"
+        , summaries
+        ]
     )
 
   mapM_ handleBlogPost postFiles

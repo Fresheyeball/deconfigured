@@ -37,4 +37,9 @@ mainHandler = do
     mainHtml $ mainTemplate
       (mainPage `appendTitle` "Home") $ toHtmlRaw $
         renderMarkup $ writeHtml def {writerHtml5 = True} homePage )
+  bookshelfPage <- (readMarkdown def) <$> (liftIO $ readFile $ pr <> "pages/bookshelf.md")
+  ( get "/bookshelf" $ do
+    mainHtml $ mainTemplate
+      (mainPage `appendTitle` "Bookshelf") $ toHtmlRaw $
+        renderMarkup $ writeHtml def {writerHtml5 = True} bookshelfPage )
   handleBlogPosts

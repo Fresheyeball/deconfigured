@@ -91,6 +91,8 @@ mainTemplate page content = template page $ mconcat
           map (li_ [])
             [ a_ [href_ "/"] "Home"
             , a_ [href_ "/blog"] "Blog"
+            , a_ [href_ "/bookshelf"] "Bookshelf"
+            , a_ [href_ "/cv"] "Curriculum Vitæ"
             ]
       , div_ [ class_ "columns small-12 medium-9 large-10"
              , id_ "content"
