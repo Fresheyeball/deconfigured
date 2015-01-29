@@ -35,7 +35,7 @@ on [hackage](https://hackage.haskell.org/package/dag).
 To get started, I just want to show how the graph works and it's capacities,
 for some easy absorption for the reader.
 
-### From Scratch
+### Basic Example
 
 I split the graph into two components - a `String`-indexed map of nodes
 (called a `NodeSchema`), and an inductive list of edges between nodes (called
@@ -44,6 +44,7 @@ an `EdgeSchema`). We reference nodes throughout the code with it's respective
 
 ```haskell
 {-# LANGUAGE DataKinds #-}
+{-# LANGUAGE ScopedTypeVariables #-}
 
 data SomeType = Val1
               | Val2
@@ -64,9 +65,9 @@ edges =
 
 `nodes` is our `NodeSchema` map, and `edges` is our `EdgeSchema`. Note that we
 use normal `String` values for `NodeSchema` maps, while `EdgeSchema`'s use
-`GHC.TypeLits.Symbol` for keys. This is for... fun reasons :) (see below).
-We force the edges to be unique in this example with the `unique` value - just
-`ENil`, but type-coercing for unique schemas.
+`GHC.TypeLits.Symbol` for keys. This is for... fun reasons :).
+We force the edges to be unique with the `unique` term - just
+`ENil`, but coercing the expression to be unique.
 
 `nodes` looks pretty simple:
 
@@ -91,16 +92,14 @@ edges ::
     True
 ```
 
-The first type parameter to `EdgeSchema` is the list of edges _verbatim_, with
-a different promoted container type. We used `Edge` and `EdgeValue` before for
-`ECons` (user friendliness and compatibility with `(->)`), and now `EdgeType`
-and `EdgeKind` serve to provide structure for our type-level functions / type
-families.
-
-The second parameter is a type-level map of the transitively connected nodes,
-for each node. This gives us a cut-and-dry method for exclusion.
-
-The last parameter is just a switch that enforces uniqueness.
+- The first type parameter to `EdgeSchema` is the list of edges _verbatim_, with
+  a different promoted container type. Before, we used `Edge` and `EdgeValue` for
+  `ECons` (user friendliness and compatibility with `(->)`), and now `EdgeType`
+  and `EdgeKind` serve to provide structure for our type-level functions / type
+  families.
+- The second parameter is a type-level map of the transitively connected nodes,
+  for each node. This gives us a cut-and-dry method for exclusion.
+- The last parameter is just a switch that enforces uniqueness.
 
 For instance, check out what happens when we add another edge:
 
@@ -116,9 +115,11 @@ ECons (Edge :: EdgeValue "foo" "qux") edges ::
     True
 ```
 
+### Underlying Machinery
+
 We achieve type-safe acyclicity of inductive list of edges through existential
 constraints on GADT data constructors for `ECons`, and type families to
-properly construct resulting types for `EdgeSchmea`. Check out `ECons`:
+properly construct resulting types for `EdgeSchmea`. Let's look at `ECons`:
 
 ```haskell
 > :t ECons
@@ -135,30 +136,23 @@ ECons ::
 
 This is where the madness starts boiling. We rely on `Acceptable` to deduce only
 edges that are sensible, then construct the resulting exclusion map manually
-with `DisallowIn`, and tac on the edge to the list. Every `EdgeSchema` has
+with `DisallowIn`, and tack-on the edge to the list. Every `EdgeSchema` has
 enough information to determine what additional `ECons` edges can hold -
 `Acceptable` can be a context entirely dependent on the older types, and solve
 for "acceptable" `from` and `to` instances.
 
 ## Okay!
 
-So here's where I got to have fun, the implementation of `Acceptable`:
+So here's where I got to have some fun, the implementation of `Acceptable`:
 
 ```haskell
 > :i Acceptable
 
+-- Defined at src/Data/Graph/DAG/Edge.hs:55:1
 class Acceptable (a :: EdgeKind)
                  (oldLoops :: [(GHC.TypeLits.Symbol, [GHC.TypeLits.Symbol])])
                  (unique :: Bool)
-        -- Defined at src/Data/Graph/DAG/Edge.hs:55:1
-```
 
-> ...not really sure how to look up instances in `ghci` :[
-
-...and some instances...
-
-```haskell
--- Defined at src/Data/Graph/DAG/Edge.hs:58:1
 instance ( Excluding from (Lookup to excludeMap)
          , from =/= to ) =>
             Acceptable ('EdgeType from to) excludeMap 'False where
@@ -169,19 +163,20 @@ instance ( Excluding from (Lookup to excludeMap)
 ```
 
 If we look sideways, all we're doing here is enforcing uniqueness by delegating
-the complexity to it's instace head context - via `Excluding` and `=/=`. `=/=`
+the complexity to the instance's head context - via `Excluding` and `=/=`. `=/=`
 just makes sure no reflexive edges are present, and `excludeMap` is the same
 `oldLoops` from before.
 
-You read each exclusion as, "`from` should not be transitively connected to
-`to`" (and vise-versa). The second exclusion for uniqueness simply states that
-we can't add an edge `from -> to` if `to` is already touched by `from`.
+You read each exclusion as, "`from` should not be _reached_ by `to`" (and
+vise-versa). The second exclusion for uniqueness simply states that
+we can't add an edge `from -> to` if `to` is already touched by `from`. :)
 
 ### Exclusion Map
 
 So, the theory is "if you know all the transitive connections of each node,
 then you can evade a pair of nodes that connects the base and a touched
-node", basically:
+node", basically. The main method to _"evasion"_ is done with testing for
+existence (like in a list or something), the _rejecting_ it:
 
 ```haskell
 -- Defined at src/Data/Graph/DAG/Edge.hs:35:1
@@ -194,15 +189,15 @@ type family Excluding (x :: k) (xs :: Maybe [k]) :: Constraint where
 
 This is just `not . elem`, implemented at the type level with structural
 recursion over type lists. Notice that we're poly-kinded in `k`. Also...
-not the whack `Deducilbe`... I kinda fudged to make it.
+note the whack `Deducilbe`... I kinda fudged making it.
 
 ### Forged Non-Deducability
 
 So, in the `Hask` category, the terminal object is `()` ("top"), and the initial
 object is `undefined` ("bottom"). In the _category of Constraints_, the terminal
 object is still `()` (that is `forall a. () => a` holds), but the initial
-object _shouldn't exist_ (in my opinion), but bad coersions give you a hack.
-Here's the implementation:
+object _shouldn't exist_ (in my opinion) - but bad coercions give you a hack.
+Here's its implementation:
 
 ```haskell
 -- Defined at src/Data/Graph/DAG/Edge.hs:35:1
@@ -223,19 +218,21 @@ type family (x :: k1) =/= (y :: k2) :: Constraint where
   a =/= b = Deducible True
 ```
 
-The crazy part is that it actually works! Props / big-ups to `Hermit` on
+The crazy part is that it actually works! Mad props / big-ups to `Hermit` on
 `#haskell` for this one. It's also in the
 [paper on type families](http://www.cis.upenn.edu/~eir/papers/2014/axioms/axioms-extended.pdf)
-, had I not been plebby when I asked.
+, had I not been plebb when I asked.
 
-The important thing to take away from this is __when you need to reject
-unification, you need a hack__. I dunno... maybe. Eh.
+The important thing to take away from this is __when you need to "reject"
+*unification*, you need a hack__.
+
+> Note to self - get better at defining... stuff.
 
 ## Alright.
 
-Phew! All done? __Hell no.__
+Phew! All done? __No.__
 
-What we need to peek at next is `DisallowIn`. It's pretty ratty:
+What we need to look at next is `DisallowIn`. It's pretty ratty:
 
 ```haskell
 -- Defined at src/Data/Graph/DAG/Edge.hs:76:1
@@ -266,30 +263,29 @@ we can simply add `from` to any list that has `to` in it - perfect for adding
 transitive connections.
 
 We then handle exhausted searches, both when `from` was found and not. It has
-simple code.
+simple code when you look it in the eyes O_O.
 
 ---
 
 ## Sub-Conclusion
 
-With this tooling, we can now construct compile-time acyclic graphs, but...
+With this tooling, we can now construct acyclic graphs, but...
 
 1. Only at compile time
-2. We can't pattern match
+2. And we can't pattern match
 
 We've basically created an existential type for every `ECons`, this makes it
-impossible to pattern match and undo some of the type families used to construct
-`oldLoops`, for instance. Also, another bummer is that `GHC.TypeLits.Symbol`
+impossible to pattern match-out types, or undo some of the type families used
+to construct `oldLoops`. Also, another bummer is that `GHC.TypeLits.Symbol`
 types can't be used (easily, at least) at runtime (they are also wrapped in an
 existential). So how do we get values out of the monster?
-
 
 __Pure insanity.__
 
 ## Pure Insanity
 
 Okay, so a graph's spanning trees can encode all it's connections (and, acyclic
-connections obviously terminate) in one value. It's simply a list of rose trees
+connections obviously terminate) into one object. It's simply a list of rose trees
 (rose forest), like so:
 
 ```haskell
@@ -298,11 +294,11 @@ data RTree a = a :@-> [RTree a]
   deriving (Show, Eq)
 ```
 
-If we promote this with `-XDataKinds` like before, we get what we've been using
-up til now; a kind `RTree` with inhabitant type `':@->`. I made a pretty
+If we promote this with `-XDataKinds` like before, we get what we'd expect;
+a kind `RTree` with inhabitant type `':@->`. I made a pretty
 complicated `SpanningTrees` type function, it takes a list of edges and
 returns a rose tree of `GHC.TypeLits.Symbol`s. I suggest trying to decipher
-how it works as an exercise for the reader. Hint - manual folds.
+how it works as an exercise for the reader. Hint - manual folds everywhere.
 
 Now, we have a pretty easy method of storing type-family results in values -
 `Data.Proxy`. It gives us a dummy data constructor, but with a polymorphic
@@ -332,22 +328,22 @@ getSpanningTrees :: EdgeSchema es x unique -> Proxy (SpanningTrees es)
 getSpanningTrees _ = Proxy
 ```
 
-Note that `SpanningTrees` is really doing all the work, here. Then we just
-hand-off the proxy.
+Note that `SpanningTrees` is really doing all the work. Then we just
+hand over the affiliated proxy.
 
 ### Reflection
 
-So `-DataKinds` gives us automatic reification, but how do we come back to
-runtime-land? With Singletons!
+So `-XDataKinds` gives us automatic reification, but how do we come back to
+runtime-land? With Singletons, donchyaknow?
 
 I recently asked a question
 [on stack overflow](http://stackoverflow.com/questions/28030118/reflecting-heterogeneous-promoted-types-back-to-values-compositionally)
 (while developing this lib...), and got a wonderful response from Andras Kovacs
-(sorry, I can't get pandoc to handle unicode yet :c).
-Basically, we hand-off the type inside `Proxy` to a type-function `Demote`
+(sorry, I can't get pandoc to handle unicode yet :c) on this idea.
+Basically, we hand-off the `a` inside `Proxy  a` to a type-function `Demote`
 that handles most of the hard work. Something very interesting about the
-implementation of singletons is the `KProxy` - a poly-kinded proxy, which
-he used to capture / constraint instances of promoted singletons _only_. Then
+implementation of singletons is the `KProxy` - a kind-level proxy, which
+is used to capture / constrain instances of promoted singletons _only_. Then
 it was pretty straight forward:
 
 ```haskell
@@ -369,15 +365,34 @@ espanningtrees :: SingI (SpanningTrees' es '[]) =>
 espanningtrees = reflect . getSpanningTrees
 ```
 
-Something also pretty interesting is we have (basically) a type-level thunk
-with `Demote` - this has to do with closed type families. Basically, closed
-type families won't reduce unless if input types can be matched on uniquely
-(please read the paper for details).
+Something also interesting - we basically have a type-level thunk
+from `Demote`. This is an artifact of type families and flexible matching.
+In summary, type families won't reduce unless if input types can be
+matched uniquely (please read the paper for actual details).
 
 If you look at the stack overflow question, you'll see that the definition of
-`Demote` indeed is pretty ambiguous. So how do we use the values?
+`Demote` indeed is pretty ambiguous:
 
-...we... well.. just, do:
+```haskell
+type family Demote' (kparam :: KProxy k) :: *  
+type Demote (a :: k) = Demote' ('KProxy :: KProxy k)  
+
+-- User-level instances
+type instance Demote'
+                ('KProxy :: KProxy Symbol) =
+                  String
+type instance Demote'
+                (KProxy :: KProxy (Tree a)) =
+                  Tree (Demote' (KProxy :: KProxy a))
+type instance Demote'
+                (KProxy :: KProxy [a]) =
+                  [Demote' (KProxy :: KProxy a)]
+```
+
+The important thing to realize that each of these `KProxy` types are __the same
+type__. Super ambiguous. So how do we use the values?
+
+...we... well.. just, do, heh.. :
 
 ```haskell
 -- Defined at src/Data/Graph/DAG/Edge/Utils.hs:131:1
@@ -390,9 +405,9 @@ etree k es = getTree k $ espanningtrees es
   getTree _ [] = Nothing
 ```
 
-aaand for some reason this type checks :)
+...aaand for some reason this type checks :)
 
-We can then flip back and build a list of edges out of values, to really
+We can flip back and build a list of edges out of values, to really
 "reflect" the list of edges in our `EdgeSchema` to a list of pairs:
 
 ```haskell
@@ -402,11 +417,13 @@ fcEdges :: SingI (SpanningTrees' es '[]) =>
 fcEdges = eForestToEdges . espanningtrees
 ```
 
+> If you need more code, github is your ally.
+
 ## Bonus
 
 Remember how I said there would be something funny happening if we tried to
-make the graph poly-kinded in it's key type? It seems like it should be pretty
-simple, right? Clone the repo and try it :)
+make the graph poly-kinded in it's key type? It seems like it should play nice
+, right? Clone the repo and try it :)
 
 ---
 
@@ -415,4 +432,4 @@ simple, right? Clone the repo and try it :)
 _Closed_ type families and Constraints are wonderful tools for type-level
 programming. However, if we get ahead of ourselves, we find that things
 diverge and become un-unifiable pretty quickly. I hope this post gave you
-something valuable! Much love, yo!
+something valuable!
