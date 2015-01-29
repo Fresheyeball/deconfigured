@@ -55,6 +55,7 @@ body {
 
 #nav ul li {
   line-height: 1.2em;
+  color: #95502D;
 }
 
 #nav ul ul li:before {
