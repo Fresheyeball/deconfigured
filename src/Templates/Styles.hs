@@ -94,7 +94,7 @@ header {
   font-smoothing: antialiased;
   font-family: "fontleroy", "Liberation Sans", sans;
   color: #ddd;
-  font-size: 2rem;
+  font-size: 2.5rem;
   font-style: italic;
   text-shadow: 0.1rem 0.1rem #{darkMain};
   margin-left: 6rem;
