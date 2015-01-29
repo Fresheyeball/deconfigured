@@ -163,6 +163,11 @@ h3 {
   box-shadow: inset 0 -1.25rem 0 #D1AD9E;
 }
 
+h4 {
+  font-weight: bold;
+  
+}
+
 h5 {
   font-weight: bold;
 }
@@ -239,6 +244,19 @@ code > span.er { color: #ff0000; font-weight: bold; }
   color: #434343;
 }
 
+table {
+  width: 100%;
+  background: #e1ae9a;
+  border: 1px solid #e1ae9a;
+}
+
+table thead {
+  background: #cd8a6f;
+}
+
+table tr.even, table tr.alt, table tr:nth-of-type(2n) {
+  background: #D9A084;
+}
 
   |]
 

@@ -22,12 +22,57 @@ import Data.Functor.Identity
 -- | This is the default main template.
 mainPage :: ( Monad m
             ) => WebPage (HtmlT (AbsoluteUrlT T.Text m) ()) T.Text
-mainPage = def { pageTitle = "DeConfigured"
+mainPage = (def :: Monad m => WebPage (HtmlT (AbsoluteUrlT T.Text m) ()) T.Text)
+               { pageTitle = "DeConfigured"
                , bodyScripts = bodyScripts'
                , styles = styles'
                , afterStylesScripts = afterStylesScripts'
+               , metaVars = mconcat
+                              [ metaVars
+                                  (def :: Monad m => WebPage (HtmlT (AbsoluteUrlT T.Text m) ()) T.Text)
+                              , mconcat $ map mkAppleIcon
+                                  [ "57x57"
+                                  , "60x60"
+                                  , "72x72"
+                                  , "76x76"
+                                  , "120x120"
+                                  , "114x114"
+                                  , "144x144"
+                                  , "152x152"
+                                  , "180x180"
+                                  ]
+                              , link_ [ rel_ "icon"
+                                      , type_ "image/png"
+                                      , href_ "/favicon-32x32.png"
+                                      , sizes_ "32x32" ]
+                              , link_ [ rel_ "icon"
+                                      , type_ "image/png"
+                                      , href_ "/android-chrome-192x192.png"
+                                      , sizes_ "192x192" ]
+                              , link_ [ rel_ "icon"
+                                      , type_ "image/png"
+                                      , href_ "/favicon-96x96.png"
+                                      , sizes_ "96x96" ]
+                              , link_ [ rel_ "icon"
+                                      , type_ "image/png"
+                                      , href_ "/favicon-16x16.png"
+                                      , sizes_ "16x16" ]
+                              , link_ [ rel_ "manifest"
+                                      , href_ "/android-chrome-manifest.json" ]
+                              , meta_ [ name_ "msapplication-TileColor"
+                                      , content_ "#ac6546" ]
+                              , meta_ [ name_ "msapplication-TileImage"
+                                      , content_ "/mstile-144x144.png" ]
+                              , meta_ [ name_ "theme-color"
+                                      , content_ "#95502D" ]
+                              ]
+               , favicon = mempty
                }
   where
+  -- mkAppleIcon :: Monad m => T.Text -> HtmlT m ()
+  mkAppleIcon x = link_ [ rel_ "apple-touch-icon"
+                        , sizes_ x
+                        , href_ $ "/apple-touch-icon-" <> x <> ".png" ]
   bodyScripts' = renderMarkup cdnBodyScripts
               <> renderMarkup inlineBodyScripts
   cdnBodyScripts :: Monad m => HostedMarkupM (HtmlT m ())

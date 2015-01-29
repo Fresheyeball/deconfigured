@@ -9,6 +9,7 @@ import Server.Utils (mainHtml)
 import Application.Types
 import Templates
 import Blog (handleBlogPosts)
+import Pages (cvPage)
 import UrlPath
 import Web.Page.Lucid
 
@@ -36,11 +37,9 @@ mainHandler = do
   makeMdPage "pages/home.md" "/" "Home"
   makeMdPage "pages/bookshelf.md" "/bookshelf" "Bookshelf"
   makeMdPage "pages/contact.md" "/contact" "Contact"
-  cvPage <- (readMarkdown def) <$> (liftIO $ readFile $ pr <> "pages/cv.md")
   ( get "/cv" $ do
     mainHtml $ mainTemplate
-      (mainPage `appendTitle` "Curriculum Vitæ") $ h1_ [] "Curriculum Vitæ"
-        <> (toHtmlRaw $ renderMarkup $ writeHtml def {writerHtml5 = True} cvPage) )
+      (mainPage `appendTitle` "Curriculum Vitæ") cvPage )
   handleBlogPosts
 
 makeMdPage file url title = do

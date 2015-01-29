@@ -8,8 +8,9 @@ will come in time. For now, you can see my personal
 
 I'm currently seeking employment, so if you would like to reach out
 to me and work together, please
-[drop me a line](/contact).
-
-If you would like to talk about research projects, feel free to ping me on
+[drop me a line](/contact). Or, if you would like to talk about projects / ideas,
+feel free to ping me on
 [#haskell](https://kiwiirc.com/client/irc.freenode.net/haskell) or
 [via email](mailto://athan@deconfigured.com).
+
+Woo!
