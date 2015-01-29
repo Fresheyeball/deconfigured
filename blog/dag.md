@@ -11,7 +11,7 @@ So, I've been messing with Haskell for a couple years, and I've always been
 perplexed on how to model acyclic graphs in a _type safe_ way. However, in
 Haskell, it's not obvious how we would declare such a type. Most of what we have
 is structural recursion through (G)ADTs, which is closer tree structures than
-sets or graphs. Since that day of disapointment in my perusal of
+sets or graphs. Since that day of disappointment in my perusal of
 [hackage](https://hackage.haskell.org), I vowed in my heart to make a directed
 acyclic graph library worthy of awe; my quest would cost me my sanct, my
 prosperity, nay, my eyeglass prescription. Alas, thou shalt bear witness to the
@@ -263,7 +263,7 @@ we can simply add `from` to any list that has `to` in it - perfect for adding
 transitive connections.
 
 We then handle exhausted searches, both when `from` was found and not. It has
-simple code when you look it in the eyes O_O.
+simple code when you stare it in the eyes O_O.
 
 ---
 
