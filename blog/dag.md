@@ -7,8 +7,10 @@ DAG
 
 > Directed Acyclic Graphs
 
-So, I've been messing with Haskell for a couple years, and I've always been
-perplexed on how to model acyclic graphs in a _type safe_ way - In
+Difficulty: __Moderate__ - basic _Type-Level_ Programming
+
+So, I've been messing around with Haskell for a couple of years, and I've always
+wondered how I would model acyclic graphs in a _type safe_ way - In
 Haskell it's not obvious how one would declare such a type. Most of our tooling
 comes from structural recursion with (G)ADTs, which more closely models tree
 structures than sets or graphs. Since that day of disappointment in my perusal of

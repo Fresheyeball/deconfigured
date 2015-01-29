@@ -95,7 +95,6 @@ header {
   font-family: "fontleroy", "Liberation Sans", sans;
   color: #ddd;
   font-size: 2.5rem;
-  font-style: italic;
   text-shadow: 0.1rem 0.1rem #{darkMain};
   margin-left: 6rem;
   margin-bottom: 0;
@@ -165,7 +164,6 @@ h3 {
 
 h4 {
   font-weight: bold;
-  
 }
 
 h5 {
