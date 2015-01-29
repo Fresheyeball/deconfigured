@@ -14,8 +14,22 @@ mainStyle = renderCss $ mainStyle' undefined
   where
   mainStyle' = [lucius|
 
+@darkMain: #95502d;
+@otherDarkMain: #c49986;
+@otherMain: #d1ad9e;
+
+@font-face {
+  font-family: "deftone";
+  src: url("/fonts/deftone_stylus.ttf");
+}
+
+@font-face {
+  font-family: "norton";
+  src: url("/fonts/NORTON.TTF");
+}
+
 body {
-  background: #b67a52;
+  background: #ac6546;
 }
 
 #nav {
@@ -25,8 +39,7 @@ body {
 
 #content {
   background: #e6c0ad;
-  padding-top: 1rem;
-  padding-bottom: 1rem;
+  padding: 1.5rem;
 }
 
 footer {
@@ -35,12 +48,13 @@ footer {
 }
 
 #logo {
-  color: #95502d;
+  color: #fff;
+  text-shadow: 0.2rem 0.2rem #{darkMain};
 }
 
 blockquote {
-  border-left: 1rem solid #c49986;
-  background: #d1ad9e;
+  border-left: 1rem solid #{otherDarkMain};
+  background: #{otherMain};
   padding-bottom: 0.5rem;
 }
 
@@ -54,19 +68,28 @@ blockquote p:last-child {
 }
 
 blockquote p {
+  padding-left: 0;
   color: #555;
 }
 
 hr {
-  border: 0.5rem solid #d1ad9e;
+  border: 0.5rem solid #{otherMain};
 }
 
 h1 {
   margin-left: 2rem;
+  -webkit-font-smoothing: antialiased;
+  font-smoothing: antialiased;
+  font-family: "deftone", sans;
 }
 
 h2 {
-  text-decoration: underline;
+  -webkit-font-smoothing: antialiased;
+  font-smoothing: antialiased;
+  font-family: "norton", sans;
+  box-shadow: inset 0 -0.3rem #222;
+  width: auto;
+  display: inline-block;
 }
 
 h3 {
@@ -74,9 +97,12 @@ h3 {
   padding-right: 2rem;
   margin-right: 1rem;
   margin-left: 3rem;
-  font-family: "Liberation Serif", serif;
   font-style: italic;
   box-shadow: inset 0 -1.25rem 0 #D1AD9E;
+}
+
+h5 {
+  font-weight: bold;
 }
 
 a, a:link, a:active, a:visited {
@@ -91,6 +117,10 @@ a:hover {
 
 pre {
   margin-bottom: 1rem;
+}
+
+p:last-child {
+  margin-bottom: 0;
 }
 
 code {
@@ -145,3 +175,19 @@ code > span.er { color: #ff0000; font-weight: bold; }
 }
 
   |]
+
+mediaQueries = LT.concat
+  [ "@media print {"
+  , "  html {"
+  , "    margin: 25mm;"
+  , "  }"
+  , "}"
+  , "@media only screen and (min-width: 64.063em) {"
+  , "  #nav {"
+  , "    border-radius: 0.5rem 0 0 0.5rem;"
+  , "  }"
+  , "  #content {"
+  , "    border-radius: 0 0.5rem 0.5rem 0.5rem;"
+  , "  }"
+  , "}"
+  ]

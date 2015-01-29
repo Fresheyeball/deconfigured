@@ -16,6 +16,8 @@ import Web.Scotty.Trans
 import Lucid.Base
 import qualified Data.Text as T
 import qualified Data.Text.Lazy as LT
+import Text.Pandoc
+import Text.Blaze.Renderer.Text (renderMarkup)
 
 import Data.Monoid
 import Data.Functor.Identity
@@ -30,7 +32,9 @@ mainHandler :: ( MonadIO m
                ) => ScottyT LT.Text m ()
 mainHandler = do
   pr <- envPrefix <$> lift ask
+  homePage <- (readMarkdown def) <$> (liftIO $ readFile $ pr <> "pages/home.md")
   ( get "/" $ do
     mainHtml $ mainTemplate
-      (mainPage `appendTitle` "Home") "home" )
+      (mainPage `appendTitle` "Home") $ toHtmlRaw $
+        renderMarkup $ writeHtml def {writerHtml5 = True} homePage )
   handleBlogPosts

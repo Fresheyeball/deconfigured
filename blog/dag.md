@@ -23,7 +23,7 @@ There are major flaws in the project, but it is still a nice
 experiment. You can find it on [github](https://github.com/athanclark/dag) and
 on [hackage](https://hackage.haskell.org/package/dag).
 
-#### TL, DR;
+##### TL;DR:
 
 > You can't even pattern match on our type-safe construction, but we can
 > extract the spanning trees from an `EdgeSchema`. The most I could see this

@@ -5,7 +5,7 @@
 
 module Templates where
 
-import Templates.Styles (mainStyle)
+import Templates.Styles (mainStyle, mediaQueries)
 import Templates.Scripts (googleAnalytics)
 
 import UrlPath
@@ -56,6 +56,7 @@ mainPage = def { pageTitle = "DeConfigured"
   inlineStyles :: Monad m => InlineMarkupM (HtmlT m ())
   inlineStyles = mconcat
     [ deploy Css mainStyle
+    , deploy Css mediaQueries
     ]
   -- localStyles :: ( Monad m
   --                , Url T.Text w
