@@ -28,6 +28,11 @@ mainStyle = renderCss $ mainStyle' undefined
   src: url("/fonts/NORTON.TTF");
 }
 
+@font-face {
+  font-family: "fontleroy";
+  src: url("/fonts/LittleLordFontleroyNF.otf");
+}
+
 body {
   background: #ac6546;
 }
@@ -35,6 +40,31 @@ body {
 #nav {
   padding-top: 1rem;
   background: #d9a084;
+}
+
+#nav ul {
+  list-style: none;
+  margin-left: 0;
+}
+
+#nav ul ul {
+  list-style: none;
+  margin-left: 0;
+  padding-left: 0.5rem;
+}
+
+#nav ul li {
+  line-height: 1.2em;
+}
+
+#nav ul ul li:before {
+  font-size: 1.2em;
+  content: "├ ";
+}
+
+#nav ul ul li:last-child:before {
+  font-size: 1.2em;
+  content: "└ ";
 }
 
 #content {
@@ -47,9 +77,40 @@ footer {
   text-align: right;
 }
 
+header {
+  vertical-align: bottom;
+  height: 9rem;
+  position: relative;
+}
+
 #logo {
   color: #fff;
   text-shadow: 0.2rem 0.2rem #{darkMain};
+}
+
+#subtitle {
+  -webkit-font-smoothing: antialiased;
+  font-smoothing: antialiased;
+  font-family: "fontleroy", "Liberation Sans", sans;
+  color: #ddd;
+  font-size: 2rem;
+  font-style: italic;
+  text-shadow: 0.1rem 0.1rem #{darkMain};
+  margin-left: 6rem;
+  margin-bottom: 0;
+  position: absolute;
+  bottom: 0;
+}
+
+#linkedin {
+  width: 15px;
+  height: 15px;
+  vertical-align: -1px;
+  border: 0;
+}
+
+.octicons {
+  vertical-align: 1px;
 }
 
 blockquote {
@@ -108,6 +169,9 @@ h5 {
 a, a:link, a:active, a:visited {
   color: #95502d;
   text-decoration: none;
+  transition-property: color;
+  transition-duration: 0.3s;
+
 }
 
 a:hover {
@@ -173,6 +237,7 @@ code > span.er { color: #ff0000; font-weight: bold; }
 .date {
   color: #434343;
 }
+
 
   |]
 

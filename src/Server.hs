@@ -13,6 +13,7 @@ import UrlPath
 import Web.Page.Lucid
 
 import Web.Scotty.Trans
+import Lucid
 import Lucid.Base
 import qualified Data.Text as T
 import qualified Data.Text.Lazy as LT
@@ -32,14 +33,20 @@ mainHandler :: ( MonadIO m
                ) => ScottyT LT.Text m ()
 mainHandler = do
   pr <- envPrefix <$> lift ask
-  homePage <- (readMarkdown def) <$> (liftIO $ readFile $ pr <> "pages/home.md")
-  ( get "/" $ do
+  makeMdPage "pages/home.md" "/" "Home"
+  makeMdPage "pages/bookshelf.md" "/bookshelf" "Bookshelf"
+  makeMdPage "pages/contact.md" "/contact" "Contact"
+  cvPage <- (readMarkdown def) <$> (liftIO $ readFile $ pr <> "pages/cv.md")
+  ( get "/cv" $ do
     mainHtml $ mainTemplate
-      (mainPage `appendTitle` "Home") $ toHtmlRaw $
-        renderMarkup $ writeHtml def {writerHtml5 = True} homePage )
-  bookshelfPage <- (readMarkdown def) <$> (liftIO $ readFile $ pr <> "pages/bookshelf.md")
-  ( get "/bookshelf" $ do
-    mainHtml $ mainTemplate
-      (mainPage `appendTitle` "Bookshelf") $ toHtmlRaw $
-        renderMarkup $ writeHtml def {writerHtml5 = True} bookshelfPage )
+      (mainPage `appendTitle` "Curriculum Vitæ") $ h1_ [] "Curriculum Vitæ"
+        <> (toHtmlRaw $ renderMarkup $ writeHtml def {writerHtml5 = True} cvPage) )
   handleBlogPosts
+
+makeMdPage file url title = do
+  pr <- envPrefix <$> lift ask
+  page <- (readMarkdown def) <$> (liftIO $ readFile $ pr <> file)
+  ( get (capture url) $ do
+    mainHtml $ mainTemplate
+      (mainPage `appendTitle` title) $ toHtmlRaw $
+        renderMarkup $ writeHtml def {writerHtml5 = True} page )

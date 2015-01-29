@@ -6,7 +6,7 @@
 module Templates where
 
 import Templates.Styles (mainStyle, mediaQueries)
-import Templates.Scripts (googleAnalytics)
+import Templates.Scripts (googleAnalytics, cornerRound)
 
 import UrlPath
 import Web.Page.Lucid
@@ -42,6 +42,7 @@ mainPage = def { pageTitle = "DeConfigured"
     [ deploy JavaScript
         ("$(document).foundation();" :: T.Text)
     , deploy JavaScript googleAnalytics
+    , deploy JavaScript cornerRound
     ]
   styles' = renderMarkup cdnStyles
         --  <> renderMarkup localStyles
@@ -52,6 +53,8 @@ mainPage = def { pageTitle = "DeConfigured"
         ("//cdnjs.cloudflare.com/ajax/libs/foundation/5.5.0/css/normalize.min.css" :: T.Text)
     , deploy Css
         ("//cdnjs.cloudflare.com/ajax/libs/foundation/5.5.0/css/foundation.min.css" :: T.Text)
+    , deploy Css
+        ("//cdnjs.cloudflare.com/ajax/libs/octicons/2.1.2/octicons.min.css" :: T.Text)
     ]
   inlineStyles :: Monad m => InlineMarkupM (HtmlT m ())
   inlineStyles = mconcat
@@ -83,17 +86,40 @@ mainTemplate :: WebPage (HtmlT (AbsoluteUrlT T.Text Identity) ()) T.Text
              -> HtmlT (AbsoluteUrlT T.Text Identity) ()
              -> HtmlT (AbsoluteUrlT T.Text Identity) ()
 mainTemplate page content = template page $ mconcat
-  [ div_ [class_ "row"] $ a_ [href_ "/"] $ h1_ [id_ "logo"] "DeConfigured"
+  [ header_ [class_ "row"] $ mconcat
+      [ a_ [href_ "/"] $ h1_ [id_ "logo"] "DeConfigured"
+      , p_ [id_ "subtitle"] "Athan Clark's Blog"
+      ]
   , div_ [class_ "row"] $ mconcat
       [ div_ [ class_ "columns small-12 medium-3 large-2"
              , id_ "nav"
              ] $ ul_ [] $ mconcat $
-          map (li_ [])
-            [ a_ [href_ "/"] "Home"
-            , a_ [href_ "/blog"] "Blog"
-            , a_ [href_ "/bookshelf"] "Bookshelf"
-            , a_ [href_ "/cv"] "Curriculum Vitæ"
-            ]
+                  map (li_ [])
+                    [ a_ [href_ "/"] "Home"
+                    , (a_ [href_ "/blog"] "Blog")
+                   <> (ul_ [] $ mconcat $
+                        map (li_ [])
+                          [ a_ [href_ "/blog/dag"] "DAG"
+                          -- ,
+                          ])
+                    , a_ [href_ "/bookshelf"] "Bookshelf"
+                    , (a_ [href_ "/contact"] "Contact")
+                   <> (ul_ [] $ mconcat $
+                        map (li_ [])
+                          [ a_ [href_ "/cv"] "C.V."
+                          , a_ [href_ "http://www.linkedin.com/pub/athan-clark/56/612/557"] $ mconcat
+                            [ img_ [ id_ "linkedin"
+                                   , src_ "/images/linkedin.png"
+                                   ]
+                            , toHtmlRaw "&nbsp;LinkedIn"
+                            ]
+                          , a_ [href_ "http://www.github.com/athanclark"] $ mconcat
+                            [ span_ [ class_ "octicon octicon-mark-github"
+                                    ] ""
+                            , toHtmlRaw "&nbsp;GitHub"
+                            ]
+                          ])
+                    ]
       , div_ [ class_ "columns small-12 medium-9 large-10"
              , id_ "content"
              ] content

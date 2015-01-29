@@ -1,14 +1,15 @@
-Home
-====
+Homepage
+========
 
-This is the personal website for Athan Clark.
+This is my personal website. I'm going to try and keep my projects hosted on
+here - their blogs, support, deployment & git repositories, etc., but that
+will come in time. For now, you can see my personal
+[blog posts](/blog).
 
-Umm... Yeah.
+Right now, I'm currently seeking employment, so if you would like to reach out
+to me and work together, please
+[drop me a line](/contact).
 
-You can find some potentially interesting stuff in the
-[blog page](/blog)... Also, here's my
-[CV](/cv). Yep!
-
-...e-excelsior...!....
-
-..?
+If you would like to talk about research projects, feel free to ping me on
+[#haskell](https://kiwiirc.com/client/irc.freenode.net/haskell) or
+[via email](mailto://athan@deconfigured.com).
