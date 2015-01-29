@@ -2,10 +2,20 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>http://www.deconfigured.com/</loc>
+  </url>
+  <url>
     <loc>http://www.deconfigured.com/blog</loc>
+  </url>
+  <url>
     <loc>http://www.deconfigured.com/blog/dag</loc>
+  </url>
+  <url>
     <loc>http://www.deconfigured.com/contact</loc>
+  </url>
+  <url>
     <loc>http://www.deconfigured.com/cv</loc>
+  </url>
+  <url>
     <loc>http://www.deconfigured.com/bookshelf</loc>
   </url>
 </urlset>
