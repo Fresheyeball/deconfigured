@@ -256,6 +256,11 @@ table tr.even, table tr.alt, table tr:nth-of-type(2n) {
   background: #D9A084;
 }
 
+.adsbygoogle {
+  margin-left: 0.9375rem;
+  margin-top: 0.9375rem;
+}
+
   |]
 
 mediaQueries = LT.concat

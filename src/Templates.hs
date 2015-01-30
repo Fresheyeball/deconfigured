@@ -135,40 +135,50 @@ mainTemplate page content = template page $ mconcat
       [ a_ [href_ "/"] $ h1_ [id_ "logo"] "DeConfigured"
       , p_ [id_ "subtitle"] "Athan Clark's Blog"
       ]
-  , div_ [class_ "row"] $ mconcat
-      [ div_ [ class_ "columns small-12 medium-3 large-2"
-             , id_ "nav"
-             ] $ ul_ [] $ mconcat $
-                  map (li_ [])
-                    [ a_ [href_ "/"] "Home"
-                    , (a_ [href_ "/blog"] "Blog")
-                   <> (ul_ [] $ mconcat $
-                        map (li_ [])
-                          [ a_ [href_ "/blog/dag"] "DAG"
-                          -- ,
-                          ])
-                    , a_ [href_ "/bookshelf"] "Bookshelf"
-                    , (a_ [href_ "/contact"] "Contact")
-                   <> (ul_ [] $ mconcat $
-                        map (li_ [])
-                          [ a_ [href_ "/cv"] "C.V."
-                          , a_ [href_ "http://www.linkedin.com/pub/athan-clark/56/612/557"] $ mconcat
-                            [ img_ [ id_ "linkedin"
-                                   , src_ "/images/linkedin.png"
-                                   ]
-                            , toHtmlRaw "&nbsp;LinkedIn"
-                            ]
-                          , a_ [href_ "http://www.github.com/athanclark"] $ mconcat
-                            [ span_ [ class_ "octicon octicon-mark-github"
-                                    ] ""
-                            , toHtmlRaw "&nbsp;GitHub"
-                            ]
-                          ])
-                    ]
-      , div_ [ class_ "columns small-12 medium-9 large-10"
-             , id_ "content"
-             ] content
-      ]
+  , div_ [class_ "row"] $ do
+      div_ [ class_ "small-12 medium-3 large-2 columns"
+           , style_ "margin:0;padding:0"
+           ] $ do
+                  div_ [id_ "nav", class_ "columns"] $ ul_ $ mconcat $
+                    map (li_ [])
+                      [ a_ [href_ "/"] "Home"
+                      , (a_ [href_ "/blog"] "Blog")
+                     <> (ul_ [] $ mconcat $
+                          map (li_ [])
+                            [ a_ [href_ "/blog/dag"] "DAG"
+                            , a_ [href_ "/blog/atlc"] "ATλC"
+                            ])
+                      , a_ [href_ "/bookshelf"] "Bookshelf"
+                      , (a_ [href_ "/contact"] "Contact")
+                     <> (ul_ [] $ mconcat $
+                          map (li_ [])
+                            [ a_ [href_ "/cv"] "C.V."
+                            , a_ [href_ "http://www.linkedin.com/pub/athan-clark/56/612/557"] $ mconcat
+                              [ img_ [ id_ "linkedin"
+                                     , src_ "/images/linkedin.png"
+                                     ]
+                              , toHtmlRaw "&nbsp;LinkedIn"
+                              ]
+                            , a_ [href_ "http://www.github.com/athanclark"] $ mconcat
+                              [ span_ [ class_ "octicon octicon-mark-github"
+                                      ] ""
+                              , toHtmlRaw "&nbsp;GitHub"
+                              ]
+                            ])
+                      ]
+                  -- google ad
+                  script_ [ async_ mempty
+                          , src_ "//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js" ] ""
+                  ins_ [ class_ "adsbygoogle"
+                       , style_ "display:inline-block;width:100%;height:125px;"
+                       , data_ "ad-client" "ca-pub-4103661590917429"
+                       , data_ "ad-slot" "2322436590" ] ""
+                  (script_ []
+                    ("(adsbygoogle = window.adsbygoogle || []).push({});" :: T.Text)
+                    :: HtmlT (AbsoluteUrlT T.Text Identity) () )
+      div_ [ class_ "columns small-12 medium-9 large-10"
+           , id_ "content"
+           ] content
   , div_ [class_ "row"] $ footer_ $
       p_ [] $ toHtmlRaw "Copyright &copy; 2015 Athan Clark, All Rights Reserved"
   ]
