@@ -9,7 +9,7 @@ Ambiguously-Typed Lambda Calculus
 
 ## Abstract
 
-I present the ambiguously-typed lambda calculus quickly and breifly, then expand
+I present the ambiguously-typed lambda calculus quickly and briefly, then expand
 on it's appearance and use cases. Lastly, we close with it's design as an
 implementation for the templating engine underlying the
 [ltext project](https://github.com/athanclark).
@@ -57,7 +57,7 @@ If you have messed around with
 [cryptol](http://cryptol.net/) yet, you should be with me so far. Basically, the
 idea is this - you have some type-level natural number in your type system
 denoting some constraint. In cryptol, they use it to create minimum bounds
-for precision or bit depth necessary to fulfil a computation. It has a flavour
+for precision or bit depth necessary to fulfill a computation. It has a flavor
 similar to the following:
 
 ```haskell
@@ -132,7 +132,7 @@ original type signature to show the different options for substitution.
 
 So, `f x` has two different options for how the stack is resolved (for now, at
 least. We might make interspersal an option if it was practical :\) - one where
-`f`'s remaining arguments have prescedence over `x`, and the opposite. I call
+`f`'s remaining arguments have precedence over `x`, and the opposite. I call
 these covariant and contravariant in fifo-style parameter nesting, respectively.
 
 ### Bonus Monoid Instance
@@ -159,7 +159,7 @@ Foo Bar
 
 > The syntax will vary in the final implementation.
 
-As a result, `x` get's monoidally appended to `"Foo Bar"`, no matter it's arity,
+As a result, `x` gets monoidally appended to `"Foo Bar"`, no matter it's arity,
 such that:
 
 ```haskell
