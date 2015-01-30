@@ -176,6 +176,12 @@ mainTemplate page content = template page $ mconcat
                   (script_ []
                     ("(adsbygoogle = window.adsbygoogle || []).push({});" :: T.Text)
                     :: HtmlT (AbsoluteUrlT T.Text Identity) () )
+                  div_ [class_ "selfieAd"] $ do
+                    em_ [] "...psst..."
+                    h4_ [] "Wanna Keep me Alive?"
+                    a_ [ href_ "/contact"
+                       , class_ "button round"
+                       ] "Hire Me!"
       div_ [ class_ "columns small-12 medium-9 large-10"
            , id_ "content"
            ] content

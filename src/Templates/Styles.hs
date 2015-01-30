@@ -257,8 +257,26 @@ table tr.even, table tr.alt, table tr:nth-of-type(2n) {
 }
 
 .adsbygoogle {
-  margin-left: 0.9375rem;
   margin-top: 0.9375rem;
+}
+
+.selfieAd {
+  display: none;
+  margin-top: 0.9375rem;
+  margin-right: 0.9375rem;
+  border-radius: 0.5rem;
+  text-align: center;
+  background: #dbc56f;
+}
+
+.selfieAd .button {
+  background: #bda154;
+  transition-property: background;
+  transition-duration: 0.3s;
+}
+
+.selfieAd .button:hover {
+  background: #835626;
 }
 
   |]
@@ -275,6 +293,9 @@ mediaQueries = LT.concat
   , "  }"
   , "  #content {"
   , "    border-radius: 0 0.5rem 0.5rem 0.5rem;"
+  , "  }"
+  , "  .selfieAd {"
+  , "    display: inline-block;"
   , "  }"
   , "}"
   ]
