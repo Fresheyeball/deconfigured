@@ -7,7 +7,7 @@ DAG
 
 > Directed Acyclic Graphs
 
-Difficulty: __Moderate__ - basic _Type-Level_ Programming
+Difficulty: __Moderate__ - basic _Type-Level Programming_
 
 So, I've been messing around with Haskell for a couple of years, and I've always
 wondered how I would model acyclic graphs in a _type safe_ way - In
