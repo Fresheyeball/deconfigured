@@ -13,5 +13,4 @@ Contact Info
 If you are interested in hiring me, my [C.V.](/cv) is hosted on this website,
 likewise my [LinkedIn profile](http://www.linkedin.com/pub/athan-clark/56/612/557)
 and [github](https://github.com/athanclark)
-are readily available. Please contact me if you need more information (or
-are willing to do business!)
+are readily available. Please contact me if you need more information!
