@@ -45,34 +45,40 @@ cvPage = mconcat
       ]
   , h2_ [] "Technical Skills"
   , h3_ [] "Languages"
-  , h4_ [] $ toHtmlRaw "Functional &amp; Pure"
-  , div_ [class_ "row"] $ mconcat
-      [ div_ [class_ "columns small-12 large-6"] $ ul_ [] $ mconcat $ map (li_ [])
-          [ "Haskell"
-          , "PureScript"
+  , table_ [] $ mconcat
+      [ thead_ [] $ tr_ [] $ mconcat $ map (th_ [])
+          [ "Language"
+          , "Description"
           ]
-      , div_ [class_ "columns small-12 large-6"] $ ul_ [] $ mconcat $ map (li_ [])
-          [ "Idris, Agda"
-          , "Cryptol"
-          ]
-      ]
-  , h4_ [] $ toHtmlRaw "Imperative &amp; Object-Oriented"
-  , div_ [class_ "row"] $ mconcat
-      [ div_ [class_ "columns small-12 large-6"] $ ul_ [] $ mconcat $ map (li_ [])
-          [ "C/C++"
-          , "PHP, Python"
-          ]
-      , div_ [class_ "columns small-12 large-6"] $ ul_ [] $ mconcat $ map (li_ [])
-          [ toHtmlRaw "ECMAScript 3/5/6, JavaScipt &nbsp; node.js"
-          , "Ruby and Rails"
+      , tbody_ [] $ mconcat $ map (tr_ [] . mconcat . map (td_ []))
+          [
+              [ strong_ [] "Haskell"
+              , "Haskell is the most advanced practical programming language as-of-date. I use it for my web servers, compilers, type systems, et. al."
+              ]
+          ,
+              [ strong_ [] "JavaScript"
+              , "Node.js and it's surrounding peers have come a long way in the last 5 years - people are now paying more attention to clean composition than one-off hack solutions. I use JavaSript and Bower for mainly front-end development, but could just as easily make a web server."
+              ]
+          ,
+              [ strong_ [] "Ruby"
+              , "Rails is everywhere, unfortunately, so it's important to know the trade."
+              ]
+          ,
+              [ strong_ [] "PHP"
+              , "This is another universal eye-sore that's important to know. I used to use PHP for my main web server development using Laravel, composer, and PEAR."
+              ]
+          ,
+              [ strong_ [] $ toHtmlRaw "Python & C/C++"
+              , "I have studied CPU architecture and low-level C programming (and assembly) for a while now. I only know enough to provide useful additions, not for orchestrating a codebase."
+              ]
           ]
       ]
   , h3_ [] "Principles"
   , mconcat $ map (\(x,y) -> oneQuart x y)
-      [ ("Assurance", "Unit and Automated Testing, Property Establishment, Type Systems, Isolated Sandboxing, Reproducible Development")
-      , ("Performance", "Profiling, Complexity and Asymptotic Analysis, Mathematics")
-      , ("Availability", "Browser-Bug Compensation and Evasion, Backward and Forward Compatibility, Search Engine Optimization, High Availability, Semantic Modeling")
-      , (toHtmlRaw "Clarity &amp; Design", "Elegant Code, Linting Tools, Design Patterns (MVC, Gang of Four, Refactoring), Natural Expression")
+      [ ("Assurance", "Unit and Automated Testing with Property Establishment gives us some pseudo-certainty, but mastering Type Systems is how we get absolute correctness. Isolated Sandboxing and Reproducible Development also go hand-in-hand with this concern, Nix is a wonderful example.")
+      , ("Performance", "Profiling is leveraged where Complexity and Asymptotic Analysis are just too difficult.")
+      , ("Availability", "Browser-Bug Compensation and Evasion, Backward and Forward Compatibility, and Search Engine Optimization are key features for any website.")
+      , (toHtmlRaw "Clarity &amp; Design", "The things we create are ideas, materialized in code. But, this materialization is surjective, not bijective! It's critically important to be clear, and compensate where you're not.")
       ]
   , h3_ [] "Development"
   , mconcat $ map (\(x,y) -> oneQuart x y)
@@ -80,6 +86,13 @@ cvPage = mconcat
       , ("Tools", toHtmlRaw "Make &amp; Autotools; Gulp, Grunt, Bower, NPM, PEAR, Composer & Cabal; Git, Darcs, Cvs; Vim")
       , (toHtmlRaw "Networking &amp; Basic Security", toHtmlRaw "Routing &amp; Switching, SELinux, File Permissions")
       , ("Distributions", "Ubuntu/Debian, Red Hat/Fedora, Gentoo, NixOS, Linux From Scratch, FreeBSD")
+      ]
+  , h3_ [] "Active Research"
+  , mconcat $ map (\(x,y) -> oneQuart x y)
+      [ ("Ambiguous Lambda Calculus", "New form of lambda calculus with Natural-number based function arity. It is designed for a flexible method of function application - perfect for arbitrary text templates.")
+      , ("PureScript", "Purely-functional programming language that compiles to JavaScript - it is Haskell based, with some potential improvements (particularly in it's effect system).")
+      , ("Cryptol", "Well-typed bit calculator featuring an interesting variant of dependent type theroy, where types depend on bit depth size.")
+      , ("Agda", "A beautifully semantic dependently-typed programming language and theorem prover, similar to Haskell.")
       ]
   , hr_ []
   , blockquote_ [] $ mconcat
