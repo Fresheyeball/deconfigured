@@ -113,7 +113,7 @@ For completeness (yeah.. completeness...):
 The `.` deonotes which side is _lowest_ or least priority. Note that this doesn't
 mess with the result's monoid, but only how parameters are nested.
 
-## Fun Ideas
+## Fun Ideas & Examples
 
 (these might stay or go...)
 
@@ -127,6 +127,13 @@ mess with the result's monoid, but only how parameters are nested.
 ...when you apply it, it's automatically `0`. I'm not sure if it's a legitimate
 idea, but if feels nice :). It would eliminate the polymorphism & information
 of the unused parameter, may be worth keeping.
+
+- Monoid over lambdas:
+
+```haskell
+(\x -> x) <>. (\y -> y) = \x y -> x <> y
+(\x -> x) .<> (\y -> y) = \y x -> x <> y
+```
 
 ## Conclusion (so far)
 
