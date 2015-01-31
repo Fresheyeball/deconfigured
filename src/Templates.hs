@@ -65,6 +65,8 @@ mainPage = (def :: Monad m => WebPage (HtmlT (AbsoluteUrlT T.Text m) ()) T.Text)
                                       , content_ "/mstile-144x144.png" ]
                               , meta_ [ name_ "theme-color"
                                       , content_ "#95502D" ]
+                              , meta_ [ makeAttribute "property" "og:image"
+                                      , content_ "http://deconfigured.com/apple-touch-icon-precomposed.png" ]
                               ]
                , favicon = mempty
                }
