@@ -19,8 +19,8 @@ cvPage = mconcat
       , "Proficient in type safety and proofs."
       ]
   , p_ [] $ mconcat
-      [ "Involved in advanced web development research projects - WebSockets, SVG, Animation, etc. Prefers"
-      , "functional languages, but can adapt to any paradigm."
+      [ "Involved in advanced web development research projects - WebSockets, SVG, Animation, etc. "
+      , "Well versed multi-paradigm developer, with deep understandings of Functional and Object Oriented design."
       ]
   , h2_ [] "Published Projects"
   , table_ [] $ mconcat
@@ -31,15 +31,15 @@ cvPage = mconcat
       , tbody_ [] $ mconcat $ map (tr_ [] . mconcat . map (td_ []))
           [
               [ strong_ [] "DAG"
-              , "Directed, type-safe acyclic graphs."
+              , "Pioneered a new api for producing compile-time directed acyclic graphs in pure haskell. It uses an advanced form of Type-Level programming to facilitate acyclic safety."
               ]
           ,
               [ strong_ [] "Markup"
-              , "Simple machinery for generalizing DOM objects."
+              , "Generalizes Html based on the style of how it's content is sourced - a simpler method for working with Html."
               ]
           ,
               [ strong_ [] "UrlPath"
-              , "URL combinators for Lucid templates."
+              , "Semantic method writing deployable urls, alleviating the web developer from plaintext urls."
               ]
           ]
       ]

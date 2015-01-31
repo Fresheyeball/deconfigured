@@ -38,7 +38,7 @@ data Expr = Term
 ```
 
 Where `Term` is just a reference to a variable, and `Type` is a reference to a
-type constant. We can then create functions and terms like so:
+type constant in alphabet `B`. We can then create functions and terms like so:
 
 ```haskell
 -- foo.sltc
@@ -54,7 +54,7 @@ type.
 ### Size-Dependent Types
 
 If you have messed around with
-[cryptol](http://cryptol.net/) yet, you should be with me so far. Basically, the
+[cryptol](http://cryptol.net/), you should be with me so far. Basically, the
 idea is this - you have some type-level natural number in your type system
 denoting some constraint. In cryptol, they use it to create minimum bounds
 for precision or bit depth necessary to fulfill a computation. It has a flavor
