@@ -267,6 +267,7 @@ table tr.even, table tr.alt, table tr:nth-of-type(2n) {
   border-radius: 0.5rem;
   text-align: center;
   background: #dbc56f;
+  padding-top: 0.9375rem;
 }
 
 .selfieAd .button {
