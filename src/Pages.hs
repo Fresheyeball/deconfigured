@@ -13,9 +13,9 @@ cvPage = mconcat
   [ h1_ [] "Curriculum Vitæ"
   , h2_ [] "Profile"
   , p_ [] $ mconcat
-      [ "Young, self educated software engineer and technology professional. Well versed - object oriented,"
-      , "functional, and domain-specific. Practical GNU/Linux and UNIX admin - can adopt any environment."
-      , "Result-oriented, well-disciplined and tactical - skilled in complexity management and formal testing."
+      [ "Self educated software engineer and technology professional. Well versed - object oriented, "
+      , "functional, and domain-specific. Practical GNU/Linux and UNIX admin - can adopt any environment. "
+      , "Result-oriented, well-disciplined and tactical - skilled in complexity management and formal testing. "
       , "Proficient in type safety and proofs."
       ]
   , p_ [] $ mconcat
