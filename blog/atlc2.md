@@ -53,7 +53,8 @@ is a delcaration, and an (optional) listing of inequalities, constraining
 declared variables to their minimum bound.
 
 The actual type of a term is then either a literal (for `String` and constant
-functions, [see below](#fun-ideas)), or a type scheme with it's type expression -
+functions, [see below](#fun-ideas-examples)),
+or a type scheme with it's type expression -
 where a type expression facilitates our dependent sized union.
 
 ### Parameters

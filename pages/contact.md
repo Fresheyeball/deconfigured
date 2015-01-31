@@ -8,7 +8,7 @@ Contact Info
 - email: `athan@deconfigured.com`
 - irc: `athan@irc.freenode.net#haskell`
 
-## Employers
+### To Employers:
 
 If you are interested in hiring me, my [C.V.](/cv) is hosted on this website,
 likewise my [LinkedIn profile](http://www.linkedin.com/pub/athan-clark/56/612/557)
