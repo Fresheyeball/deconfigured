@@ -149,6 +149,7 @@ mainTemplate page content = template page $ mconcat
                           map (li_ [])
                             [ a_ [href_ "/blog/dag"] "DAG"
                             , a_ [href_ "/blog/atlc"] "ATλC"
+                            , a_ [href_ "/blog/atlc2"] "ATλC-2"
                             ])
                       , a_ [href_ "/bookshelf"] "Bookshelf"
                       , (a_ [href_ "/contact"] "Contact")
