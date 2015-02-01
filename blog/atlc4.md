@@ -89,6 +89,7 @@ document... differently. Here is what `\y x -> ^y x <>. "foo"` turns into:
 \ [_____] := y
   [_____] := x
   | y-1 |
+  |-----|
   |  x  |
   @-----@ :--> y x <> "foo"
 ```
@@ -99,6 +100,7 @@ And the monoid `x .<> y` turns into:
 \ [_____] := x
   [_____] := y
   |  y  |
+  |-----|
   |  x  |
   @-----@ :--> x <> y
 ```
