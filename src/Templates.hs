@@ -179,7 +179,6 @@ mainTemplate page content = template page $ mconcat
                   script_ [ async_ mempty
                           , src_ "//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js" ] ""
                   ins_ [ class_ "adsbygoogle"
-                       , style_ "display:inline-block;width:100%;height:125px;"
                        , data_ "ad-client" "ca-pub-4103661590917429"
                        , data_ "ad-slot" "2322436590" ] ""
                   (script_ []

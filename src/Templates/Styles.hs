@@ -258,6 +258,12 @@ table tr.even, table tr.alt, table tr:nth-of-type(2n) {
 
 .adsbygoogle {
   margin-top: 0.9375rem;
+  margin-right: 0.9375rem;
+  height: 125px;
+  width: 152px;
+  display: inline-block;
+  text-align: center;
+  border-radius: 0.5rem;
 }
 
 .selfieAd {
