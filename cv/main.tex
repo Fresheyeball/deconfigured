@@ -1,0 +1,139 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% "ModernCV" CV and Cover Letter
+% LaTeX Template
+% Version 1.1 (9/12/12)
+%
+% This template has been downloaded from:
+% http://www.LaTeXTemplates.com
+%
+% Original author:
+% Xavier Danaux (xdanaux@gmail.com)
+%
+% License:
+% CC BY-NC-SA 3.0 (http://creativecommons.org/licenses/by-nc-sa/3.0/)
+%
+% Important note:
+% This template requires the moderncv.cls and .sty files to be in the same
+% directory as this .tex file. These files provide the resume style and themes
+% used for structuring the document.
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%----------------------------------------------------------------------------------------
+%	PACKAGES AND OTHER DOCUMENT CONFIGURATIONS
+%----------------------------------------------------------------------------------------
+
+\documentclass[12pt,letterpaper,sans]{moderncv} % Font sizes: 10, 11, or 12; paper sizes: a4paper, letterpaper, a5paper, legalpaper, executivepaper or landscape; font families: sans or roman
+
+\title{CV}
+
+\moderncvstyle{classic} % CV theme - options include: 'casual' (default), 'classic', 'oldstyle' and 'banking'
+\moderncvcolor{blue} % CV color - options include: 'blue' (default), 'orange', 'green', 'red', 'purple', 'grey' and 'black'
+
+\usepackage{lipsum} % Used for inserting dummy 'Lorem ipsum' text into the template
+\usepackage{amsfonts}
+\usepackage{multicol}
+\usepackage{yfonts}
+
+\usepackage[scale=0.75]{geometry} % Reduce document margins
+%\setlength{\hintscolumnwidth}{3cm} % Uncomment to change the width of the dates column
+%\setlength{\makecvtitlenamewidth}{10cm} % For the 'classic' style, uncomment to adjust the width of the space allocated to your name
+
+%----------------------------------------------------------------------------------------
+%	NAME AND CONTACT INFORMATION SECTION
+%----------------------------------------------------------------------------------------
+
+\firstname{Athan} % Your first name
+\familyname{Clark} % Your last name
+
+% All information in this block is optional, comment out any lines you don't need
+\title{Curriculum Vitae}
+% \address{15208 W. Ellsworth Dr.}{Golden, Colorado 80401}
+% \mobile{(303) 884 7762}
+\email{athan@deconfigured.com}
+\homepage{deconfigured.com}{DeConfigured}
+
+%----------------------------------------------------------------------------------------
+
+\begin{document}
+
+\makecvtitle % Print the CV title
+
+%----------------------------------------------------------------------------------------
+%	EDUCATION SECTION
+%----------------------------------------------------------------------------------------
+
+\section{Profile}
+
+Self educated software engineer and computer scientist. Well versed - object oriented, functional, and domain-specific. Practical GNU/Linux and UNIX admin - can adopt any environment. Result-oriented, well-disciplined and tactical - skilled in complexity management and formal testing. Proficient in type safety and proofs.\\
+Involved in advanced web development research projects - WebSockets, SVG, Animation, etc. Well versed multi-paradigm developer, with deep understandings of Functional and Object Oriented design.
+
+\section{Published Projects}
+
+\cvitem{DAG}{Pioneered a new api for producing compile-time directed acyclic graphs in pure haskell. It uses an advanced form of Type-Level programming to facilitate acyclic safety.}
+\cvitem{Markup}{Generalizes Html based on the style of how it's content is sourced - a simpler method for working with Html.}
+\cvitem{UrlPath}{Method writing deployable urls - where the hostname is encoded in context, aiding in the port of a web application from one host to another.}
+
+\section{Technical Skills}
+
+\subsection{Programming Languages}
+\cvitem{Haskell}{Haskell is the most advanced practical programming language as-of-date. I use it for my web servers, compilers, type systems, etc. - it's fast, clean, stable, and popular.}
+\cvitem{JavaScript}{Node.js and it's surrounding projects have come a long way in the last 5 years - people are now paying more attention to clean composition and ideal code. I use JavaSript and Bower for my front-end development.}
+\cvitem{Ruby}{Rails is everywhere, unfortunately, so it's important to know the trade.}
+\cvitem{PHP}{This is another universal eye-sore that's important to know. I used to use PHP for my main web server development using Laravel, composer, and PEAR.}
+\cvitem{Python \& C/C++}{I have studied CPU architecture and low-level C programming (and assembly) for a while now. I only know enough to provide useful additions, not for orchestrating a codebase.}
+\subsection{Principals}
+\cvitem{Assurance}{Unit and Automated Testing with Property Establishment gives us some pseudo-certainty, but mastering Type Systems is how we get absolute correctness. Isolated Sandboxing and Reproducible Development also go hand-in-hand with this concern, Nix is a wonderful example.}
+\cvitem{Performance}{Profiling is leveraged where Complexity and Asymptotic Analysis are just too difficult.}
+\cvitem{Availability}{Browser-Bug Compensation and Evasion, Backward and Forward Compatibility, and Search Engine Optimization are key features for any website.}
+\cvitem{Clarity \& Design}{The things we create are ideas, materialized in code. But, this materialization is surjective, not bijective! It's critically important to be clear, and compensate where you're not.}
+
+\subsection{Development}
+\cvitem{Administration}{Installation \& Configuration, Kernel Compilation, Hardware Optimization \& Troubleshooting}
+\cvitem{Tools}{Make \& Autotools; Gulp, Grunt, Bower, NPM, PEAR, Composer \& Cabal; Git, Darcs, Cvs; Vim, Atom}
+\cvitem{Networking \& Basic Security}{Routing \& Switching, SELinux, File Permissions}
+\cvitem{Distributions}{Ubuntu/Debian, Red Hat/Fedora, Gentoo, NixOS, Linux From Scratch, FreeBSD}
+
+\subsection{Active Research}
+\cvitem{Ambiguous Lambda Calculus}{New form of lambda calculus with Natural-number based function arity. It is designed for a flexible method of function application - perfect for arbitrary text templates.}
+\cvitem{PureScript}{Purely-functional programming language that compiles to JavaScript - it is Haskell based, with some potential improvements (particularly in it's effect system).}
+\cvitem{Cryptol}{Well-typed bit calculator featuring an interesting variant of dependent type theroy, where types depend on bit depth size.}
+\cvitem{Agda}{A beautifully semantic dependently-typed programming language and theorem prover, similar to Haskell.}
+
+\pagebreak
+
+\section{Past Work}
+\cvitem{American Financing}{Upgraded their legacy PHP and Ruby codebase to a unified Haskell web application - a mirror image of the previous (with semantic HTML improvements), while compensating for historic urls for proper redirection. Completed in 2 weeks.}
+\cvitem{Kifaru Outdoors}{Emergency web application - an iTunes clone for iPhones, but accessible from the web - to allow remote control of the song playing from the dance floor. Completed in 5 days.}
+\cvitem{Peerless Network}{Developed command-line applications for the Network Operations Center to maximize help-desk throughput.}
+
+\section{References}
+
+Please contact me for references.
+
+% %----------------------------------------------------------------------------------------
+% %	COVER LETTER
+% %----------------------------------------------------------------------------------------
+%
+% % To remove the cover letter, comment out this entire block
+%
+% \clearpage
+%
+% \recipient{HR Departmnet}{Corporation\\123 Pleasant Lane\\12345 City, State} % Letter recipient
+% \date{\today} % Letter date
+% \opening{Dear Sir or Madam,} % Opening greeting
+% \closing{Sincerely yours,} % Closing phrase
+% \enclosure[Attached]{curriculum vit\ae{}} % List of enclosed documents
+%
+% \makelettertitle % Print letter title
+%
+% I have been preparing to work in the programming field for 5 years, and have found myself researching advanced fields and topics including type theory and compiler design. My adventrue has left me with more hands-on experience than I've seen from most udergraduates of computer science, and my aptitude is the product of self education. I've put myself through a practical bootcamp, where everything I learned was searched for. Although that also means that I haven't been formally trained by the standard cirriculum, I believe I am competent and skillful enough to perform above and beyond your expectations.\\
+% Not only are my qualifications satisfactory for web development, but this job would be my first professional position, technically speaking. It would be an honour to work for. An office is farily alien to me, but the mentality isn't - this is a wonderful opportunity for me to finally start my professional career. If I were to be hired, I would dedicate myself to mastering every aspect of my position and improve the the company's potential with a unique addition.\\
+% Excellence is what I strive for in life, and this position would give a kickstart to my personal and professional development. I am very cooperative and can adapt to any style of management. I am innovative, but also a team-player when necessary.\\
+% I would be humbled if you considered my application for this position. I am confident that my performance would satisfy every need, and would be overjoyed to have an opportunity to work in this fast-paced and profitable field.
+%
+% \makeletterclosing % Print letter signature
+%
+% %----------------------------------------------------------------------------------------
+
+\end{document}

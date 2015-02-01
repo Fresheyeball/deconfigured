@@ -11,6 +11,8 @@ import Data.Monoid
 cvPage :: Monad m => HtmlT m ()
 cvPage = mconcat
   [ h1_ [] "Curriculum Vitæ"
+  , a_ [ style_ "position:absolute;right:2rem;top:2rem"
+       , href_ "/public-athanclark.pdf" ] "pdf version"
   , h2_ [] "Profile"
   , p_ [] $ mconcat
       [ "Self educated software engineer and computer scientist. Well versed - object oriented, "
