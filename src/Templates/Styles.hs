@@ -243,9 +243,12 @@ code > span.er { color: #ff0000; font-weight: bold; }
 }
 
 table {
-  width: 100%;
   background: #e1ae9a;
   border: 1px solid #e1ae9a;
+}
+
+table.wide {
+  width: 100%;
 }
 
 table thead {

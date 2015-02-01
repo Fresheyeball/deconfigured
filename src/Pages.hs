@@ -25,7 +25,7 @@ cvPage = mconcat
       , "Well versed multi-paradigm developer, with deep understandings of Functional and Object Oriented design."
       ]
   , h2_ [] "Published Projects"
-  , table_ [] $ mconcat
+  , table_ [class_ "wide"] $ mconcat
       [ thead_ [] $ tr_ [] $ mconcat $ map (th_ [])
           [ "Name"
           , "Description"
@@ -47,7 +47,7 @@ cvPage = mconcat
       ]
   , h2_ [] "Technical Skills"
   , h3_ [] "Languages"
-  , table_ [] $ mconcat
+  , table_ [class_ "wide"] $ mconcat
       [ thead_ [] $ tr_ [] $ mconcat $ map (th_ [])
           [ "Language"
           , "Description"
@@ -97,7 +97,7 @@ cvPage = mconcat
       , ("Agda", "A beautifully semantic dependently-typed programming language and theorem prover, similar to Haskell.")
       ]
   , h2_ [] "Past Work"
-  , table_ [] $ mconcat
+  , table_ [class_ "wide"] $ mconcat
         [ thead_ [] $ tr_ [] $ mconcat $ map (th_ [])
             [ "Company"
             , "Accomplishments"
