@@ -83,6 +83,7 @@ mainPage = (def :: Monad m => WebPage (HtmlT (AbsoluteUrlT T.Text m) ()) T.Text)
         ("//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js" :: T.Text)
     , deploy JavaScript
         ("//cdnjs.cloudflare.com/ajax/libs/foundation/5.5.0/js/foundation.min.js" :: T.Text)
+    , deploy JavaScript ("//u.heatmap.it/log.js" :: T.Text)
     ]
   inlineBodyScripts :: Monad m => InlineMarkupM (HtmlT m ())
   inlineBodyScripts = mconcat
@@ -91,6 +92,7 @@ mainPage = (def :: Monad m => WebPage (HtmlT (AbsoluteUrlT T.Text m) ()) T.Text)
     , deploy JavaScript googleAnalytics
     , deploy JavaScript cornerRound
     ]
+
   styles' = renderMarkup cdnStyles
         --  <> renderMarkup localStyles
          <> renderMarkup inlineStyles
