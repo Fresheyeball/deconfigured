@@ -141,3 +141,5 @@ of the unused parameter, may be worth keeping.
 So, I failed to make a complete idea. But, it's a start! If you would like to
 contribute or adopt the idea, please use & abuse my free time, I would like to see
 this project go far.
+
+> Continue to the [next post](/blog/atlc3).

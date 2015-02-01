@@ -231,3 +231,5 @@ reduction is built-in through parameter resolution.
 
 I apologize ahead of time for my lack of proofs, I haven't gotten that far yet.
 Soon this will all be in production! Thank you for reading :)
+
+> Continue to the [next post](/blog/atlc2).

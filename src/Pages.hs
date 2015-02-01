@@ -13,7 +13,7 @@ cvPage = mconcat
   [ h1_ [] "Curriculum Vitæ"
   , h2_ [] "Profile"
   , p_ [] $ mconcat
-      [ "Self educated software engineer and technology professional. Well versed - object oriented, "
+      [ "Self educated software engineer and computer scientist. Well versed - object oriented, "
       , "functional, and domain-specific. Practical GNU/Linux and UNIX admin - can adopt any environment. "
       , "Result-oriented, well-disciplined and tactical - skilled in complexity management and formal testing. "
       , "Proficient in type safety and proofs."
@@ -35,11 +35,11 @@ cvPage = mconcat
               ]
           ,
               [ strong_ [] "Markup"
-              , "Generalizes Html based on the style of how it's content is sourced - a simpler method for working with Html."
+              , "Trivially generalizes Html based on the style of how it's content is sourced - a simpler method for working with Html."
               ]
           ,
               [ strong_ [] "UrlPath"
-              , "Semantic method writing deployable urls, alleviating the web developer from plaintext urls."
+              , "Method writing deployable urls - where the hostname is encoded in context, aiding in the port of a web application from one host to another."
               ]
           ]
       ]
@@ -53,11 +53,11 @@ cvPage = mconcat
       , tbody_ [] $ mconcat $ map (tr_ [] . mconcat . map (td_ []))
           [
               [ strong_ [] "Haskell"
-              , "Haskell is the most advanced practical programming language as-of-date. I use it for my web servers, compilers, type systems, et. al."
+              , "Haskell is the most advanced practical programming language as-of-date. I use it for my web servers, compilers, type systems, etc. - it's fast, clean, stable, and popular."
               ]
           ,
               [ strong_ [] "JavaScript"
-              , "Node.js and it's surrounding peers have come a long way in the last 5 years - people are now paying more attention to clean composition than one-off hack solutions. I use JavaSript and Bower for mainly front-end development, but could just as easily make a web server."
+              , "Node.js and it's surrounding projects have come a long way in the last 5 years - people are now paying more attention to clean composition and ideal code. I use JavaSript and Bower for my front-end development."
               ]
           ,
               [ strong_ [] "Ruby"
@@ -83,7 +83,7 @@ cvPage = mconcat
   , h3_ [] "Development"
   , mconcat $ map (\(x,y) -> oneQuart x y)
       [ ("Administration", toHtmlRaw "Installation & Configuration, Kernel Compilation, Hardware Optimization &amp; Troubleshooting")
-      , ("Tools", toHtmlRaw "Make &amp; Autotools; Gulp, Grunt, Bower, NPM, PEAR, Composer & Cabal; Git, Darcs, Cvs; Vim")
+      , ("Tools", toHtmlRaw "Make &amp; Autotools; Gulp, Grunt, Bower, NPM, PEAR, Composer & Cabal; Git, Darcs, Cvs; Vim, Atom")
       , (toHtmlRaw "Networking &amp; Basic Security", toHtmlRaw "Routing &amp; Switching, SELinux, File Permissions")
       , ("Distributions", "Ubuntu/Debian, Red Hat/Fedora, Gentoo, NixOS, Linux From Scratch, FreeBSD")
       ]
@@ -94,11 +94,32 @@ cvPage = mconcat
       , ("Cryptol", "Well-typed bit calculator featuring an interesting variant of dependent type theroy, where types depend on bit depth size.")
       , ("Agda", "A beautifully semantic dependently-typed programming language and theorem prover, similar to Haskell.")
       ]
+  , h2_ [] "Past Work"
+  , table_ [] $ mconcat
+        [ thead_ [] $ tr_ [] $ mconcat $ map (th_ [])
+            [ "Company"
+            , "Accomplishments"
+            ]
+        , tbody_ [] $ mconcat $ map (tr_ [] . mconcat . map (td_ []))
+            [
+                [ strong_ [] "American Financing"
+                , "Upgraded their legacy PHP and Ruby codebase to a unified Haskell web application - a mirror image of the previous (with semantic HTML improvements), while compensating for historic urls for proper redirection. Completed in 2 weeks."
+                ]
+            ,
+                [ strong_ [] "Peerless Network"
+                , "Developed command-line applications for the Network Operations Center to maximize help-desk throughput."
+                ]
+            ,
+                [ strong_ [] "Kifaru Outdoors"
+                , "Emergency web application - an iTunes clone for iPhones, but accessible from the web - to allow remote control of the song playing from the dance floor. Completed in 5 days."
+                ]
+            ]
+        ]
   , hr_ []
   , blockquote_ [] $ mconcat
       [ "Please "
       , a_ [href_ "/contact"] "contact me"
-      , " if you need references or hard copies!"
+      , " if you need references!"
       ]
   ]
   where
