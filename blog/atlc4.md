@@ -126,7 +126,10 @@ we can't take it from a parameter, we don't even know if `x` is a lambda.
 This also means we have to do a bit of co-backtracking in our bottom-up parse -
 we will have to instantiate these possibly unbound variables in our substitutions
 out of faith until we find either it's value expression lambda or the assignment
-term.
+term. This means substitution creation is actually a upward fold, forcing
+free variables to either be bound later, or fail at the end.
+
+> Shadowing should be easy
 
 A couple things to see here:
 
