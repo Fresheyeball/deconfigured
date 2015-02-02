@@ -105,6 +105,22 @@ And the monoid `x .<> y` turns into:
   @-----@ :--> x <> y
 ```
 
+...what about just a pain term `x`?
+
+```haskell
+\ [_____] := x
+  |  x  |
+  @-----@ :--> x
+```
+
+a literal `"foo"`?
+
+```haskell
+\ @-----@ :--> "foo"
+```
+
+...a zero-arity lambda.
+
 A couple things to see here:
 
 - We first assign our first and second parameter to size variables.
@@ -125,3 +141,38 @@ Which are the same possabilities that term names can reduced/resolve to.
 
 > __Note__: A monoid over two literals should automatically append them:
 > "foo" <> "bar" ~ "foobar"
+
+### Reduction
+
+"Reduction" (turning value expressions into substitution objects) goes
+bottom-up - We start with literals and term references to
+
+## Example
+
+Let's grab that expression we wrote earlier...
+
+```haskell
+((\x -> x <>. "foo") ^ (\x -> \y -> ^x y)) .<> (\z -> ^z "bar")
+```
+
+### AST
+
+Here's what the parsed AST would look like:
+
+```haskell
+                .<>
+             /          \
+            $              ->
+        /      \          /  \
+      ->        ^->      z    $
+    /   \      /  \          / \
+   x    <>.   x     ->     ^z   "bar"
+       /  \        / \
+      x "foo"    y    $
+                     / \
+                   ^x   y
+```
+
+Now, let's try reducing it from the left side:
+
+1.
