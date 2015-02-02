@@ -105,14 +105,6 @@ And the monoid `x .<> y` turns into:
   @-----@ :--> x <> y
 ```
 
-...what about just a pain term `x`?
-
-```haskell
-\ [_____] := x
-  |  x  |
-  @-----@ :--> x
-```
-
 a literal `"foo"`?
 
 ```haskell
@@ -120,6 +112,16 @@ a literal `"foo"`?
 ```
 
 ...a zero-arity lambda.
+
+What about just a pain term `x`?
+
+```haskell
+\ |  x  |
+  @-----@ :--> x
+```
+
+ILLEGAL! The reason why this is illegal is because we have no way to bind `x` -
+we can't take it from a parameter, we don't even know if `x` is a lambda.
 
 A couple things to see here:
 
@@ -173,6 +175,6 @@ Here's what the parsed AST would look like:
                    ^x   y
 ```
 
-Now, let's try reducing it from the left side:
+Now, let's try reducing it from the left side.
 
 1.
