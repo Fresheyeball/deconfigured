@@ -120,8 +120,13 @@ What about just a pain term `x`?
   @-----@ :--> x
 ```
 
-ILLEGAL! The reason why this is illegal is because we have no way to bind `x` -
+[ILLEGAL!](https://www.youtube.com/watch?v=xgu_qB9NZ3w)
+The reason why this is illegal is because we have no way to bind `x` -
 we can't take it from a parameter, we don't even know if `x` is a lambda.
+This also means we have to do a bit of co-backtracking in our bottom-up parse -
+we will have to instantiate these possibly unbound variables in our substitutions
+out of faith until we find either it's value expression lambda or the assignment
+term.
 
 A couple things to see here:
 
