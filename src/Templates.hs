@@ -127,8 +127,7 @@ appendTitle :: Monad m =>
                WebPage (HtmlT m ()) T.Text
             -> T.Text
             -> WebPage (HtmlT m ()) T.Text
-appendTitle page x = page { pageTitle = pageTitle page
-                              <> " → " <> x
+appendTitle page x = page { pageTitle = x <> " ← " <> pageTitle page
                           }
 
 mainTemplate :: WebPage (HtmlT (AbsoluteUrlT T.Text Identity) ()) T.Text

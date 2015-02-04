@@ -1,4 +1,4 @@
-%Ambiguous Lambda Calc
+%Ambiguously-Typed Lambda Calculus
 %Athan Clark
 %2/3/2015
 
@@ -290,6 +290,141 @@ $ =
     | + X |
     @-----@ :--> f (g x)
 ```
+
+### Eta and Beta
+
+#### Beta
+
+Beta reduction is just application, where our substitution mapping facilitates
+the actual substitution you would expect with an untyped expression like
+`(\p -> E1) E2`, you of course would get `E1[p := E2]`. That is done through
+our definition of application:
+
+```haskell
+(f : forall a. {a >= 1} => a) (x : forall b. => b)
+  : forall a b. {a >= 1} => a - 1 + X
+
+  where
+    X = (if uses (head f) then b
+                          else 0)
+```
+
+From the substitution mapping perspective, if I have a function
+`f : forall a. {a >= 1} => a`:
+
+```haskell
+f =
+  \ |  a  |
+    @-----@ :--> B
+```
+
+how do I "realise" it has a first parameter? This is done through "deconstruction",
+a degenerate method of pattern matching against the first parameter of a term
+(assuming it exists), and constructing the new type (making sure that the `uses`
+check succeeds, which in this case actually is an occours check in `B`):
+
+```haskell
+f =
+  \ [_____] =: (h : forall z. => z)
+    | a-1 |
+    | +|z||
+    @-----@ :--> B' z
+```
+
+I use `|z|` to represent the "absolute value" of the included parameter, after the
+occurs check, such that if I'm using `|a|` in the presence of a substitution,
+where the value term bound to `|a|` (in our case with `|z|`, `h`) is now our
+term for the occurs check in `B'`. If `h` occurs in `B'`, then `|z| = z`.
+If the parameter isn't used in `B'`, then we don't have to care about `h`'s
+parameters, and can set `|z| = 0`.
+
+```haskell
+\(h : forall z. => z) ->
+  ((B : forall b. {b >= 1} => b) h
+    : forall z b. {b >= 1} => (b - 1) + |z|)
+      : forall z b. {b >= 1} =>
+          (b - 1) + |z| + 1 ~ b + |z| ~ c
+
+|a| = if (occurs h B) then a
+                      else 0
+```
+
+Now, application and beta reduction is straightforward. I have `f` and `x`:
+
+```haskell
+f : forall a. {a >= 1} => a
+  ~ forall z b. {b >= 1} => (b - 1) + |z| + 1
+f =
+  \ [_____] =: (h : forall z. => z)
+    | a-1 |
+    | +|z||
+    @-----@ :--> (B' : forall b. => b) z
+
+x : forall c. => c
+x =
+  \ |  c  |
+    @-----@ :--> x'
+```
+
+So, `a-1` ~ `b`. Also, `b + |z|` ~ `a` ~ `a-1 + 1 + |z|`, thus `a` ~ `a + |z|`,
+meaning: "a term's parameters depend on it's applied arguments".
+
+```haskell
+f x =
+  \ | a-1 |
+    | +|c||
+    @-----@ :--> B x
+
+f ^x =
+  \ | |c| |
+    |-----|
+    | a-1 |
+    @-----@ :--> B x
+
+^f x =
+  \ | a-1 |
+    |-----|
+    | |c| |
+    @-----@ :--> B x
+```
+
+#### Eta
+
+For eta reduction, all we need is this same unification reasoning. Let's
+deconstruct some arbitrary term `f` again:
+
+```haskell
+f : forall a. => a
+
+f =
+  \ |  a  |
+    @-----@ :--> B
+
+f : forall a b. {b >= 1} => (b-1) + |a| + 1
+
+f =
+  \ [_____] =: (h : forall a. => a)
+    | b-1 |
+    | +|c||
+    @-----@ :--> (B' : forall b. {b >= 1} => b) h
+```
+
+Now, what would happen if we removed `h` from this picture, and just stuck with
+`B'`? Well, just `B' : forall b. => b` of course! Q.E.D.
+
+...kidding.
+
+Lets think about `f`'s second type signature - we have `h` as a parameter now,
+which is just the atomic `1`. But after we apply
+something, we have to handle it's possible parameters `|a|`. However, _when_
+we actually apply `h`, we hand it over to `B'`. When you look at the type
+signature of `B' h`, well that would be `B' h : forall b a. {b >= 1} => (b-1) + |a|`.
+If we didn't apply anything to `B'`, then we would of course just have the type
+`B' : forall b. => b`. Therefore, if we first remove the lambda of
+`\h -> B' h` to `B' h` and decrement the type signature,
+and then not apply `|a|`, we would have `f = B' : forall b. => b`.
+
+Q.E.D.?
 
 ## Conclusion
 
