@@ -86,8 +86,8 @@ Our substitutions are essentially lambdas, but with a stack of parameters. We
 document... differently. Here is what `\y x -> ^y x <>. "foo"` turns into:
 
 ```haskell
-\ [_____] := y
-  [_____] := x
+\ [_____] =: y
+  [_____] =: x
   | y-1 |
   |-----|
   |  x  |
@@ -97,8 +97,8 @@ document... differently. Here is what `\y x -> ^y x <>. "foo"` turns into:
 And the monoid `x .<> y` turns into:
 
 ```haskell
-\ [_____] := x
-  [_____] := y
+\ [_____] =: x
+  [_____] =: y
   |  y  |
   |-----|
   |  x  |
@@ -170,7 +170,7 @@ Let's grab that expression we wrote earlier...
 Here's what the parsed AST would look like:
 
 ```haskell
-                .<>
+                 .<>
              /          \
             $              ->
         /      \          /  \
@@ -185,4 +185,20 @@ Here's what the parsed AST would look like:
 
 Now, let's try reducing it from the left side.
 
-1.
+1. `"foo"`
+    - `@ :--> "foo"`
+2. `x`
+    - Postpone
+3. `x <>. "foo"`
+    - `[=:x,x,@] :--> x <> "foo"` where `x` is free
+4. `\x -> x <>. "foo"`
+    - `[=:x,x,@] :--> x <> "foo"` where `x` is bound
+
+That's the first big branch. Let's work on the `^x y` branch now:
+
+1. `^x y`
+    - Induce higher size in `x`: `x :: forall a. {a >= 1} => a`
+        - This will become an _expectation_ for when we find the definition of `x`
+          (either from assignment or application). Until we complete that expectation,
+          We cannot substitute. (a "thunk")
+    - `y` is also unbound
