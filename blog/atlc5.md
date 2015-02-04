@@ -298,5 +298,4 @@ each term has, at runtime - our occurs & uses checks have discretion for a type
 _because_ this is a cascading system - if something isn't used, it's history
 is forgotten.
 
-I hope you enjoyed this, please ping me if you have any questions / want to
-help me get out of homelessness!
+I hope you enjoyed this, please ping me if you have any questions!
