@@ -1,4 +1,4 @@
-%Ambiguous Lambda Calc - 4
+%Ambiguous Lambda Calc
 %Athan Clark
 %2/3/2015
 
