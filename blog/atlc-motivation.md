@@ -304,7 +304,7 @@ B x :         forall j k b. {j >= 1} => (j-1) + |b|_j
 -- Q.E.D. (I think)
 ```
 
-## Legability
+## Legibility
 
 It's pretty easy to see that we _add_ the constant `1` for each lambda, but
 combine generally (and totally) terms we aren't aware of yet. Also, with application,
