@@ -158,6 +158,8 @@ mainTemplate page content = template page $ mconcat
                                       , a_ [href_ "/blog/atlc4"] "4"
                                       , "-"
                                       , a_ [href_ "/blog/atlc5"] "5"
+                                      , ul_ [] $ li_ [] $
+                                          a_ [href_ "/blog/atlc-motivation"] "Motivation"
                                       ]
                             ])
                       , a_ [href_ "/bookshelf"] "Bookshelf"
